@@ -8,7 +8,7 @@
         ********** Para configurar e instalar a API,  precimaos das seguintes bibliotecas:
                 express                npm install express --save
                 cors                   npm instal cors --save
-                body-parser            npm instal cors --save
+                body-parser            npm instal body-parser --save
 
         ********** Para configurar e instalar o acesso ao Banco de Dados precimos:   
                 prisma                 npm install prisma --save (conexão com o BD)
@@ -119,6 +119,62 @@ app.put('/v1/controle-jogos/jogo/:id', cors(), bodyParserJSON, async function (r
 
 })
 
-app.listen('8080', function(){
+'==================================================================== CRUD ATUALIZACAO ===================================================================='
+
+//EndPoint para inserir uma atualizacao no Banco de Dados 
+app.post('/v1/controle-atualizacoes/atualizacao', cors(), bodyParserJSON, async function (request,response) {
+        
+        //Recebe o content type para validar o tipo de dados da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o conteúdo do body da requisição
+        let dadosBody = request.body
+
+        //Encaminhando os dados do body da requisição para a controller inserir no Banco de Dados 
+        let resultAtualizacao =  await controllerAtualizacao.inserirAtualizacao(dadosBody,contentType)
+
+        response.status(resultAtualizacao.status_code)
+        response.json(resultAtualizacao)
+
+})
+
+//EndPoint para listar todas atualizacoes no Banco de Dados
+app.get('/v1/controle-atualizacoes/atualizacao', cors(), async function (request, response) {
+        
+        //Chama a função para listar os jogos 
+        let resultAtualizacao = await controllerAtualizacao.listarAtualizacao()
+
+        response.status(resultAtualizacao.status_code)
+        response.json(resultAtualizacao)
+
+})
+
+//EndPoint para buscar atualizacao no Banco de Dados pelo ID
+app.get('/v1/controle-atualizacoes/atualizacao/:id', cors(), async function (request, response) {
+        
+        let idAtualizacao = request.params.id
+
+        //Chama a função para listar as atualizacoes
+        let resultAtualizacao = await controllerJogo.buscarAtualizacao(idAtualizacao)
+
+        response.status(resultAtualizacao.status_code)
+        response.json(resultAtualizacao)
+
+})
+
+//EndPoint para deletar atualizacao no Banco de Dados pelo ID
+app.delete('/v1/controle-atualizacoes/atualizacao/:id', cors(), async function (request, response) {
+        
+        let idAtualizacao = request.params.id
+
+        //Chama a função para listar os jogos 
+        let resultAtualizacao = await controllerAtualizacao.excluirAtualizacao(idAtualizacao)
+
+        response.status(resultAtualizacao.status_code)
+        response.json(resultAtualizacao)
+
+})
+
+app.listen('3030', function(){
         console.log('API aguardando Requisições...')
 })
