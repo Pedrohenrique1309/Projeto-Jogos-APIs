@@ -17,7 +17,7 @@ const insertAtualizacao = async function(atualizacao){
 
     try{
 
-        let sql = `insert into table tbl_atualizacao (
+        let sql = `insert into tbl_atualizacao (
                                                 nome,
                                                 versao,
                                                 tamanho,
@@ -39,7 +39,6 @@ const insertAtualizacao = async function(atualizacao){
     }   
                                             
     }catch(error){
-        console.log(error)
         return false
     }
 
@@ -54,7 +53,7 @@ const updateAtualizacao = async function (atualizacao) {
                                         versao ='${atualizacao.versao }',
                                         tamanho = '${atualizacao.tamanho}',
                                         link = '${atualizacao.link}' 
-                                    where id = ${atualizacao.id} `
+                                        where id = ${atualizacao.id} `
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -111,6 +110,7 @@ const selectAllAtualizacao = async function(){
         }
             
     }catch(error) {
+        console.log(error)
         return false
     } 
 

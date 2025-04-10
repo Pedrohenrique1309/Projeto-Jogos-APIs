@@ -29,6 +29,7 @@ const bodyParser = require('body-parser')
 
 //Import das cotrollers para realizar o CRUD de dados
 const controllerJogo = require('./controller/jogo/controllerJogo.js')
+const controllerAtualizacao = require('./controller/atualizacao/controllerAtualizacao.js')
 
 //Estabelecendo o formato dos dados que deverá chegar no body da requisição (POST ou PUT)
 const bodyParserJSON = bodyParser.json()
@@ -122,7 +123,7 @@ app.put('/v1/controle-jogos/jogo/:id', cors(), bodyParserJSON, async function (r
 '==================================================================== CRUD ATUALIZACAO ===================================================================='
 
 //EndPoint para inserir uma atualizacao no Banco de Dados 
-app.post('/v1/controle-atualizacoes/atualizacao', cors(), bodyParserJSON, async function (request,response) {
+app.post('/v1/controle-jogos/atualizacao', cors(), bodyParserJSON, async function (request,response) {
         
         //Recebe o content type para validar o tipo de dados da requisição
         let contentType = request.headers['content-type']
@@ -139,7 +140,7 @@ app.post('/v1/controle-atualizacoes/atualizacao', cors(), bodyParserJSON, async 
 })
 
 //EndPoint para listar todas atualizacoes no Banco de Dados
-app.get('/v1/controle-atualizacoes/atualizacao', cors(), async function (request, response) {
+app.get('/v1/controle-jogos/atualizacao', cors(), async function (request, response) {
         
         //Chama a função para listar os jogos 
         let resultAtualizacao = await controllerAtualizacao.listarAtualizacao()
@@ -150,20 +151,21 @@ app.get('/v1/controle-atualizacoes/atualizacao', cors(), async function (request
 })
 
 //EndPoint para buscar atualizacao no Banco de Dados pelo ID
-app.get('/v1/controle-atualizacoes/atualizacao/:id', cors(), async function (request, response) {
+app.get('/v1/controle-jogos/atualizacao/:id', cors(), async function (request, response) {
         
         let idAtualizacao = request.params.id
 
         //Chama a função para listar as atualizacoes
-        let resultAtualizacao = await controllerJogo.buscarAtualizacao(idAtualizacao)
+        let resultAtualizacao = await controllerAtualizacao.buscarAtualizacao(idAtualizacao)
 
-        response.status(resultAtualizacao.status_code)
+        console.log(resultAtualizacao)
+       response.status(resultAtualizacao.status_code)
         response.json(resultAtualizacao)
 
 })
 
 //EndPoint para deletar atualizacao no Banco de Dados pelo ID
-app.delete('/v1/controle-atualizacoes/atualizacao/:id', cors(), async function (request, response) {
+app.delete('/v1/controle-jogos/atualizacao/:id', cors(), async function (request, response) {
         
         let idAtualizacao = request.params.id
 
@@ -175,6 +177,6 @@ app.delete('/v1/controle-atualizacoes/atualizacao/:id', cors(), async function (
 
 })
 
-app.listen('3030', function(){
+app.listen('8080', function(){
         console.log('API aguardando Requisições...')
 })

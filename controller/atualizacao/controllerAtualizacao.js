@@ -26,7 +26,7 @@ const inserirAtualizacao = async function(atualizacao, contentType){
                 return MESSAGE.ERROR_REQUIRED_FIELD //400
             }else{
                 //encamnha os dados da nova atualizacao para ser inseridos no banco de dados
-                let resultAtualizacao = await atualizacaoDAO.insertJogo(atualizacao)
+                let resultAtualizacao = await atualizacaoDAO.insertAtualizacao(atualizacao)
 
                 if(resultAtualizacao){
                     return MESSAGE.SUCESS_CREATE_ITEM //201
@@ -40,6 +40,7 @@ const inserirAtualizacao = async function(atualizacao, contentType){
         }
 
     } catch(error){
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }   
 
@@ -144,13 +145,13 @@ const listarAtualizacao = async function (){
 
         if(resultAtualizacao != false || typeof(resultAtualizacao) == 'object'){
 
-            if(resultJogo.length > 0){
+            if(resultAtualizacao.length > 0){
 
                 //Cria um objeto Json para retornar a lista de jogos
                 dadosAtualizacao.status = true
                 dadosAtualizacao.status_code = 200
                 dadosAtualizacao.Items = resultAtualizacao.length
-                dadosAtualizacao.games = resultAtualizacao
+                dadosAtualizacao.atualizacoes = resultAtualizacao
                 
                 return  dadosAtualizacao//200
             }else{
@@ -163,8 +164,8 @@ const listarAtualizacao = async function (){
         }
         
         
-    }catch(erro){
-
+    }catch(error){
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
 
     }
@@ -185,14 +186,14 @@ const buscarAtualizacao = async function (id){
 
             if(resultAtualizacao !== String(resultAtualizacao)){
                 
-                if(resultv != false || typeof(resultAtualizacao) == 'object'){
+                if(resultAtualizacao != false || typeof(resultAtualizacao) == 'object'){
 
                     if(resultAtualizacao.length > 0){
         
                         //Cria um objeto Json para retornar a atulizacao
                         dadosAtualizacao.status = true
                         dadosAtualizacao.status_code = 200
-                        dadosAtualizacao.games = resultAtualizacao
+                        dadosAtualizacao.atualizacoes = resultAtualizacao
                         dadosAtualizacao.id = id
                         
                         return  dadosAtualizacao//200
@@ -215,9 +216,9 @@ const buscarAtualizacao = async function (id){
             return ERROR_REQUIRED_FIELD //400
         }
 
-
+        
     }catch(result){
-
+    console.log(result)
     }
     
 }
