@@ -43,7 +43,6 @@ const inserirJogo = async function(jogo, contentType){
         }
 
     } catch(error){
-        console.log(erro)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }   
 

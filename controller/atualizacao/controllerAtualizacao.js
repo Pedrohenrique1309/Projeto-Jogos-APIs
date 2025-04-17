@@ -151,7 +151,7 @@ const listarAtualizacao = async function (){
                 dadosAtualizacao.status = true
                 dadosAtualizacao.status_code = 200
                 dadosAtualizacao.Items = resultAtualizacao.length
-                dadosAtualizacao.atualizacoes = resultAtualizacao
+                dadosAtualizacao.updates = resultAtualizacao
                 
                 return  dadosAtualizacao//200
             }else{
@@ -177,6 +177,7 @@ const buscarAtualizacao = async function (id){
      
     try{
 
+        
         if(id != '' && id != undefined && id != null && !isNaN(id) && id > 0){
 
             let dadosAtualizacao = {}
@@ -184,8 +185,8 @@ const buscarAtualizacao = async function (id){
             //Chama fução para retornar os dados da atualizacao
             let resultAtualizacao = await atualizacaoDAO.selectByIdAtualizacao(id)
 
-            if(resultAtualizacao !== String(resultAtualizacao)){
-                
+            if(resultAtualizacao !== String(resultAtualizacao)){                
+
                 if(resultAtualizacao != false || typeof(resultAtualizacao) == 'object'){
 
                     if(resultAtualizacao.length > 0){
@@ -193,7 +194,7 @@ const buscarAtualizacao = async function (id){
                         //Cria um objeto Json para retornar a atulizacao
                         dadosAtualizacao.status = true
                         dadosAtualizacao.status_code = 200
-                        dadosAtualizacao.atualizacoes = resultAtualizacao
+                        dadosAtualizacao.updates = resultAtualizacao
                         dadosAtualizacao.id = id
                         
                         return  dadosAtualizacao//200
@@ -218,7 +219,7 @@ const buscarAtualizacao = async function (id){
 
         
     }catch(result){
-    console.log(result)
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
     
 }

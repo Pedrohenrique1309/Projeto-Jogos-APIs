@@ -88,7 +88,7 @@ const deleteJogo = async function(id){
     try{
 
 
-        //Script SQL para retornar dados de um jogo pelo seu id
+        //Script SQL para deletr dados de um jogo pelo seu id
         let sql = `delete from tbl_jogo where id=${id}`
 
         //Executa o Script SQL e aguarda o retorno dos dados

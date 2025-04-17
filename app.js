@@ -30,6 +30,10 @@ const bodyParser = require('body-parser')
 //Import das cotrollers para realizar o CRUD de dados
 const controllerJogo = require('./controller/jogo/controllerJogo.js')
 const controllerAtualizacao = require('./controller/atualizacao/controllerAtualizacao.js')
+const controllerFaixaEtaria = require('./controller/faixaEtaria/controllerFaixaEtaria.js')
+const controllerPlataforma = require('./controller/plataforma/controllerPlataforma.js')
+const controllerVersaoJogo = require('./controller/versaoJogo/controllerVersaoJogo.js')
+const controllerAssinatura = require('./controller/assinatura/controllerAssinatura.js')
 
 //Estabelecendo o formato dos dados que deverá chegar no body da requisição (POST ou PUT)
 const bodyParserJSON = bodyParser.json()
@@ -120,7 +124,7 @@ app.put('/v1/controle-jogos/jogo/:id', cors(), bodyParserJSON, async function (r
 
 })
 
-'==================================================================== CRUD ATUALIZACAO ===================================================================='
+'==================================================================== CRUD ATUALIZACAO ================================================================================='
 
 //EndPoint para inserir uma atualizacao no Banco de Dados 
 app.post('/v1/controle-jogos/atualizacao', cors(), bodyParserJSON, async function (request,response) {
@@ -158,8 +162,7 @@ app.get('/v1/controle-jogos/atualizacao/:id', cors(), async function (request, r
         //Chama a função para listar as atualizacoes
         let resultAtualizacao = await controllerAtualizacao.buscarAtualizacao(idAtualizacao)
 
-        console.log(resultAtualizacao)
-       response.status(resultAtualizacao.status_code)
+        response.status(resultAtualizacao.status_code)
         response.json(resultAtualizacao)
 
 })
@@ -176,6 +179,327 @@ app.delete('/v1/controle-jogos/atualizacao/:id', cors(), async function (request
         response.json(resultAtualizacao)
 
 })
+
+//EndPoint para atualizar atualizacao no Banco de Dados pelo ID
+app.put('/v1/controle-jogos/atualizacao/:id', cors(), bodyParserJSON, async function (request,response) {
+        
+        
+        //Recebe content-type da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o ID do jogo
+        let idAtualizacao = request.params.id
+
+        //Recebe os dados da atualizacao encainhado no body da requisição
+        let dadosBody = request.body
+
+        let resultAtualizacao = await controllerAtualizacao.atualizarAtualizacao(dadosBody, idAtualizacao, contentType)
+
+        response.status(resultAtualizacao.status_code)  
+        response.json(resultAtualizacao)
+})
+
+
+'==================================================================== CRUD FAIXAS ETÁRIAS ================================================================================='
+
+//EndPoint para inserir uma faixa etaria no Banco de Dados 
+app.post('/v1/controle-jogos/faixa-etaria', cors(), bodyParserJSON, async function (request,response) {
+        
+        //Recebe o content type para validar o tipo de dados da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o conteúdo do body da requisição
+        let dadosBody = request.body
+
+        //Encaminhando os dados do body da requisição para a controller inserir no Banco de Dados 
+        let resultFaixaEtaria =  await controllerFaixaEtaria.inserirFaixaEtaria(dadosBody,contentType)
+
+        response.status(resultFaixaEtaria.status_code)  
+        response.json(resultFaixaEtaria)
+
+})
+
+//EndPoint para listar todas faixas etárias no Banco de Dados
+app.get('/v1/controle-jogos/faixa-etaria', cors(), async function (request, response) {
+        
+        //Chama a função para listar oas faixas etárias
+        let resultFaixaEtaria = await controllerFaixaEtaria.listarFaixaEtaria() 
+
+        response.status(resultFaixaEtaria .status_code)
+        response.json(resultFaixaEtaria )
+
+})
+
+//EndPoint para buscar faixa etária no Banco de Dados pelo ID
+app.get('/v1/controle-jogos/faixa-etaria/:id', cors(), async function (request, response) {
+        
+        let idFaixaEtaria = request.params.id
+
+        //Chama a função para listar os jogos 
+        let resultFaixaEtaria = await controllerFaixaEtaria.buscarFaixaEtaria(idFaixaEtaria)
+
+        response.status(resultFaixaEtaria.status_code)
+        response.json(resultFaixaEtaria)
+
+})
+
+//EndPoint para deletar faixa etária no Banco de Dados pelo ID
+app.delete('/v1/controle-jogos/faixa-etaria/:id', cors(), async function (request, response) {
+        
+        let idFaixaEtaria = request.params.id
+
+        //Chama a função para listar as faixas etárias 
+        let resultFaixaEtaria = await controllerFaixaEtaria.excluirFaixaEtaria(idFaixaEtaria)
+
+        response.status(resultFaixaEtaria.status_code)
+        response.json(resultFaixaEtaria)
+
+
+})
+
+//EndPoint para atualizar faixa etária no Banco de Dados pelo ID
+app.put('/v1/controle-jogos/faixa-etaria/:id', cors(), bodyParserJSON, async function (request,response) {
+        
+        
+        //Recebe content-type da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o ID da faixa etária
+        let idFaixaEtaria = request.params.id
+
+        //Recebe os dados da faixa etária encainhado no body da requisição
+        let dadosBody = request.body
+
+        let resultFaixaEtaria = await controllerFaixaEtaria.atualizarFaixaEtaria(dadosBody, idFaixaEtaria, contentType)
+
+        response.status(resultFaixaEtaria.status_code)  
+        response.json(resultFaixaEtaria)
+})
+
+'==================================================================== CRUD PLATAFORMA ================================================================================='
+
+//EndPoint para inserir uma plataforma no Banco de Dados
+app.post('/v1/controle-jogos/plataforma', cors(), bodyParserJSON, async function (request,response) {
+        
+        //Recebe o content type para validar o tipo de dados da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o conteúdo do body da requisição
+        let dadosBody = request.body
+
+        //Encaminhando os dados do body da requisição para a controller inserir no Banco de Dados 
+        let resultPlataforma =  await controllerPlataforma.inserirPlataforma(dadosBody,contentType)
+
+        response.status(resultPlataforma.status_code)  
+        response.json(resultPlataforma)
+
+})
+
+//EndPoint para listar todas plataformas no Banco de Dados
+app.get('/v1/controle-jogos/plataforma', cors(), async function (request, response) {
+        
+        //Chama a função para listar as plataformas
+        let resultPlataforma = await controllerPlataforma.listarPlataforma() 
+
+        response.status(resultPlataforma.status_code)
+        response.json(resultPlataforma)
+
+})
+
+//EndPoint para buscar plataforma no Banco de Dados pelo ID
+app.get('/v1/controle-jogos/plataforma/:id', cors(), async function (request, response) {
+        
+        let idPlataforma = request.params.id
+
+        //Chama a função para listar as plataformas 
+        let resultPlataforma = await controllerPlataforma.buscarPlataforma(idPlataforma)
+
+        response.status(resultPlataforma.status_code)
+        response.json(resultPlataforma)
+
+})
+
+//EndPoint para deletar plataforma no Banco de Dados pelo ID
+app.delete('/v1/controle-jogos/plataforma/:id', cors(), async function (request, response) {
+        
+        let idPlataforma = request.params.id
+
+        //Chama a função para listar as plataformas 
+        let resultPlataforma = await controllerPlataforma.excluirPlataforma(idPlataforma)
+
+        response.status(resultPlataforma.status_code)
+        response.json(resultPlataforma)
+
+})
+
+//EndPoint para atualizar plataforma no Banco de Dados pelo ID
+app.put('/v1/controle-jogos/plataforma/:id', cors(), bodyParserJSON, async function (request,response) {
+        
+        
+        //Recebe content-type da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o ID da plataforma
+        let idPlataforma = request.params.id
+
+        //Recebe os dados da plataforma encainhado no body da requisição
+        let dadosBody = request.body
+
+        let resultPlataforma = await controllerPlataforma.atualizarPlataforma(dadosBody, idPlataforma, contentType)
+
+        response.status(resultPlataforma.status_code)  
+        response.json(resultPlataforma)
+})
+
+'==================================================================== CRUD VERSAO JOGO ================================================================================='
+
+//EndPoint para inserir uma versao de jogo no Banco de Dados
+app.post('/v1/controle-jogos/versao-jogo', cors(), bodyParserJSON, async function (request,response) {
+        
+        //Recebe o content type para validar o tipo de dados da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o conteúdo do body da requisição
+        let dadosBody = request.body
+
+        //Encaminhando os dados do body da requisição para a controller inserir no Banco de Dados 
+        let resultVersaoJogo =  await controllerVersaoJogo.inserirVersaoJogo(dadosBody,contentType)
+
+        response.status(resultVersaoJogo.status_code)  
+        response.json(resultVersaoJogo)
+
+})
+
+//EndPoint para listar todas versoes de jogos no Banco de Dados
+app.get('/v1/controle-jogos/versao-jogo', cors(), async function (request, response) {
+        
+        //Chama a função para listar as versoes de jogos
+        let resultVersaoJogo = await controllerVersaoJogo.listarVersaoJogo() 
+
+        response.status(resultVersaoJogo.status_code)
+        response.json(resultVersaoJogo)
+
+})
+
+//EndPoint para buscar versao de jogo no Banco de Dados pelo ID
+app.get('/v1/controle-jogos/versao-jogo/:id', cors(), async function (request, response) {
+        
+        let idVersaoJogo = request.params.id
+
+        //Chama a função para listar as versoes de jogos 
+        let resultVersaoJogo = await controllerVersaoJogo.buscarVersaoJogo(idVersaoJogo)
+
+        response.status(resultVersaoJogo.status_code)
+        response.json(resultVersaoJogo)
+
+})
+
+//EndPoint para deletar versao de jogo no Banco de Dados pelo ID
+app.delete('/v1/controle-jogos/versao-jogo/:id', cors(), async function (request, response) {
+        
+        let idVersaoJogo = request.params.id
+
+        //Chama a função para listar as versoes de jogos 
+        let resultVersaoJogo = await controllerVersaoJogo.excluirVersaoJogo(idVersaoJogo)
+
+        response.status(resultVersaoJogo.status_code)
+        response.json(resultVersaoJogo)
+
+})
+
+//EndPoint para atualizar versao de jogo no Banco de Dados pelo ID
+app.put('/v1/controle-jogos/versao-jogo/:id', cors(), bodyParserJSON, async function (request,response) {
+        
+        
+        //Recebe content-type da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o ID da versao de jogo
+        let idVersaoJogo = request.params.id
+
+        //Recebe os dados da versao de jogo encainhado no body da requisição
+        let dadosBody = request.body
+
+        let resultVersaoJogo = await controllerVersaoJogo.atualizarVersaoJogo(dadosBody, idVersaoJogo, contentType)
+
+        response.status(resultVersaoJogo.status_code)  
+        response.json(resultVersaoJogo)
+})
+
+
+'==================================================================== CRUD ASSINATURA ================================================================================='
+
+//EndPoint para inserir uma assinatura no Banco de Dados
+app.post('/v1/controle-jogos/assinatura', cors(), bodyParserJSON, async function (request,response) {
+        //Recebe o content type para validar o tipo de dados da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o conteúdo do body da requisição
+        let dadosBody = request.body
+
+        //Encaminhando os dados do body da requisição para a controller inserir no Banco de Dados 
+        let resultAssinatura =  await controllerAssinatura.inserirAssinatura(dadosBody,contentType)
+
+        response.status(resultAssinatura.status_code)  
+        response.json(resultAssinatura)
+
+})
+
+//EndPoint para listar todas assinaturas no Banco de Dados
+app.get('/v1/controle-jogos/assinatura', cors(), async function (request, response) {
+        
+        //Chama a função para listar as assinaturas
+        let resultAssinatura = await controllerAssinatura.listarAssinatura() 
+
+        response.status(resultAssinatura.status_code)
+        response.json(resultAssinatura)
+
+})
+
+//EndPoint para buscar assinatura no Banco de Dados pelo ID
+app.get('/v1/controle-jogos/assinatura/:id', cors(), async function (request, response) {
+        let idAssinatura = request.params.id
+
+        //Chama a função para listar as assinaturas 
+        let resultAssinatura = await controllerAssinatura.buscarAssinatura(idAssinatura)
+
+        response.status(resultAssinatura.status_code)
+        response.json(resultAssinatura)
+
+})
+
+//EndPoint para deletar assinatura no Banco de Dados pelo ID
+app.get('v1/controle-jogos/assinatura/:id', cors(), async function (request, response) {
+        
+        let idAssinatura = request.params.id
+
+        //Chama a função para listar as assinaturas 
+        let resultAssinatura = await controllerAssinatura.excluirAssinatura(idAssinatura)
+
+        response.status(resultAssinatura.status_code)
+        response.json(resultAssinatura)
+
+})
+
+//EndPoint para atualizar assinatura no Banco de Dados pelo ID
+app.get('/v1/controle-jogos/assinatura/:id', cors(), bodyParserJSON, async function (request,response) {
+        //Recebe content-type da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o ID da assinatura
+        let idAssinatura = request.params.id
+
+        //Recebe os dados da assinatura encainhado no body da requisição
+        let dadosBody = request.body
+
+        let resultAssinatura = await controllerAssinatura.atualizarAssinatura(dadosBody, idAssinatura, contentType)
+
+        response.status(resultAssinatura.status_code)  
+        response.json(resultAssinatura)
+})
+
+
+
 
 app.listen('8080', function(){
         console.log('API aguardando Requisições...')
