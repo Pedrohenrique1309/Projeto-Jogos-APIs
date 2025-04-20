@@ -34,6 +34,8 @@ const controllerFaixaEtaria = require('./controller/faixaEtaria/controllerFaixaE
 const controllerPlataforma = require('./controller/plataforma/controllerPlataforma.js')
 const controllerVersaoJogo = require('./controller/versaoJogo/controllerVersaoJogo.js')
 const controllerAssinatura = require('./controller/assinatura/controllerAssinatura.js')
+const controllerCategoria = require('./controller/assinatura/controllerCategoria.js')
+const controllerDesenvolvedor = require('./controller/assinatura/controllerDesenvolvedor.js')
 
 //Estabelecendo o formato dos dados que deverá chegar no body da requisição (POST ou PUT)
 const bodyParserJSON = bodyParser.json()
@@ -469,7 +471,7 @@ app.get('/v1/controle-jogos/assinatura/:id', cors(), async function (request, re
 })
 
 //EndPoint para deletar assinatura no Banco de Dados pelo ID
-app.get('v1/controle-jogos/assinatura/:id', cors(), async function (request, response) {
+app.delete('v1/controle-jogos/assinatura/:id', cors(), async function (request, response) {
         
         let idAssinatura = request.params.id
 
@@ -482,7 +484,7 @@ app.get('v1/controle-jogos/assinatura/:id', cors(), async function (request, res
 })
 
 //EndPoint para atualizar assinatura no Banco de Dados pelo ID
-app.get('/v1/controle-jogos/assinatura/:id', cors(), bodyParserJSON, async function (request,response) {
+app.put('/v1/controle-jogos/assinatura/:id', cors(), bodyParserJSON, async function (request,response) {
         //Recebe content-type da requisição
         let contentType = request.headers['content-type']
 
@@ -498,7 +500,153 @@ app.get('/v1/controle-jogos/assinatura/:id', cors(), bodyParserJSON, async funct
         response.json(resultAssinatura)
 })
 
+'==================================================================== CRUD CATEGORIA ================================================================================='
 
+//EndPoint para inserir uma categoria no Banco de Dados 
+app.post('/v1/controle-jogos/categoria', cors(), bodyParserJSON, async function (request,response) {
+        
+        //Recebe o content type para validar o tipo de dados da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o conteúdo do body da requisição
+        let dadosBody = request.body
+
+        //Encaminhando os dados do body da requisição para a controller inserir no Banco de Dados 
+        let resultCategoria =  await controllerCategoria.inserirCategoria(dadosBody,contentType)
+
+        response.status(resultCategoria.status_code)
+        response.json(resultJogo)
+
+})
+
+//EndPoint para listar todas categorias no Banco de Dados
+app.get('/v1/controle-jogos/categoria', cors(), async function (request, response) {
+        
+        //Chama a função para listar as Categorias
+        let resultCategoria = await controllerCategoria.listarCategoria()
+
+        response.status(resultCategoria.status_code)
+        response.json(resultCategoria)
+
+})
+
+//EndPoint para buscar categoria no Banco de Dados pelo ID
+app.get('/v1/controle-jogos/categoria/:id', cors(), async function (request, response) {
+        let idCategoria = request.params.id
+
+        //Chama a função para listar as categorias
+        let resultCategoria = await controllerCategoria.buscarCategoria(idCategoria)
+
+        response.status(resultCategoria.status_code)
+        response.json(resultCategoria)
+
+})
+
+//EndPoint para deletar categoria no Banco de Dados pelo ID
+app.delete('v1/controle-jogos/categoria/:id', cors(), async function (request, response) {
+        
+        let idCategoria = request.params.id
+
+        //Chama a função para listar as categorias 
+        let resultCategoria  = await controllerCategoria.excluirCategoria(idCategoria)
+
+        response.status(resultCategoria .status_code)
+        response.json(resultCategoria )
+
+})
+
+//EndPoint para atualizar categoria no Banco de Dados pelo ID
+app.put('/v1/controle-jogos/categoria /:id', cors(), bodyParserJSON, async function (request,response) {
+        //Recebe content-type da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o ID da assinatura
+        let idCategoria = request.params.id
+
+        //Recebe os dados da assinatura encainhado no body da requisição
+        let dadosBody = request.body
+
+        let resultCategoria  = await controllerCategoria.atualizarCategoria(dadosBody, idAssinatura, contentType)
+
+        response.status(resultCategoria.status_code)  
+        response.json(resultCategoria)
+})
+
+'==================================================================== CRUD DESENVOLVEDOR ================================================================================='
+
+//EndPoint para inserir um desenvolvedor no Banco de Dados 
+app.post('/v1/controle-jogos/desenvolvedor', cors(), bodyParserJSON, async function (request,response) {
+        
+        //Recebe o content type para validar o tipo de dados da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o conteúdo do body da requisição
+        let dadosBody = request.body
+
+        //Encaminhando os dados do body da requisição para a controller inserir no Banco de Dados 
+        let resultDesenvolvedor =  await controllerDesenvolvedor.inserirDesenvolvedor(dadosBody,contentType)
+
+        response.status(resultDesenvolvedor.status_code)
+        response.json(resultDesenvolvedor)
+
+})
+
+//EndPoint para listar todos desenvolvedores no Banco de Dados
+app.get('/v1/controle-jogos/desenvolvedor', cors(), async function (request, response) {
+        
+        //Chama a função para listar os desenvolvedores
+        let resultDesenvolvedor = await controllerDesenvolvedor.listarDesenvolvedor()
+
+        response.status(resultDesenvolvedor.status_code)
+        response.json(resultDesenvolvedor)
+
+})
+
+//EndPoint para buscar desenvolvedor no Banco de Dados pelo ID
+app.get('/v1/controle-jogos/desenvolvedor/:id', cors(), async function (request, response) {
+        
+        let idDesenvolvedor = request.params.id
+
+        //Chama a função para listar os desenvolvedores 
+        let resultDesenvolvedor = await controllerDesenvolvedor.buscarDesenvolvedor(idDesenvolvedor)
+
+        response.status(resultDesenvolvedor.status_code)
+        response.json(resultDesenvolvedor)
+
+})
+
+//EndPoint para deletar desenvolvedor no Banco de Dados pelo ID
+app.delete('/v1/controle-jogos/desenvolvedor/:id', cors(), async function (request, response) {
+        
+        let idDesenvolvedor = request.params.id
+
+        //Chama a função para listar os Desenvolvedores 
+        let resultDesenvolvedor = await controllerDesenvolvedor.excluirDesenvolvedor(idDesenvolvedor)
+
+        response.status(resultDesenvolvedor.status_code)
+        response.json(resultDesenvolvedoro)
+
+})
+
+//EndPoint para atualizar desenvolvedor no Banco de Dados pelo ID
+app.put('/v1/controle-jogos/desenvolvedor/:id', cors(), bodyParserJSON, async function (request,response) {
+        
+        
+        //Recebe content-type da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o ID do desenvolvedor
+        let idDesenvolvedor = request.params.id
+
+        //Recebe os dados do jogo encainhado no body da requisição
+        let dadosBody = request.body
+
+        let resultDesenvolvedor = await controllerDesenvolvedor.atualizarDesenvolvedor(dadosBody, idDesenvolvedor, contentType)
+
+        response.status(resultDesenvolvedor.status_code)
+        response.json(resultDesenvolvedor)
+
+})
 
 
 app.listen('8080', function(){
