@@ -35,11 +35,14 @@ const insertVersaoJogo = async function(versaoJogo){
 }
 
 //Função para atualizar no Banco de Dados uma versao de jogo existente
-const updateVersaoJogo = async function(versaoJogo){
+const updateVersaoJogo = async function(versaoJogo, id){
     try{
+
         let sql = `update tbl_versao_jogo set  nome = '${versaoJogo.nome}' 
-                                    where id = ${versaoJogo.id} `
+                                    where id = ${id}
+                                    `
         let result = await prisma.$executeRawUnsafe(sql)
+
         if(result){
             return true
         }else{
@@ -81,7 +84,6 @@ const selectAllVersaoJogo = async function(){
             return false
         }                            
     }catch(error){
-        console.log(error)
         return false
     }
 }
@@ -93,6 +95,7 @@ const selectByIdVersaoJogo = async function(id){
         let sql = `select * from tbl_versao_jogo where id = ${id}`
 
         let result = await prisma.$queryRawUnsafe(sql)
+       
 
         if(result){
             return result
@@ -100,7 +103,7 @@ const selectByIdVersaoJogo = async function(id){
             return false
         }                            
     }catch(error){
-        console.log(error)
+        
         return false
     }
 }

@@ -71,9 +71,7 @@ const atualizarDesenvolvedor = async function(desenvolvedor, id, contentType){
                 if(resultDesenvolvedor.status_code == 200){
                     //Update
 
-                    //Adiciona um atributo id no JSON para encaminhar id da requisição
-                    desenvolvedor.id = parseInt(id)
-                    let result = await desenvolvedorDAO.updatetDesenvolvedor(desenvolvedor)
+                    let result = await desenvolvedorDAO.updatetDesenvolvedor(desenvolvedor, id)
 
                     if(result){
                         return MESSAGE.SUCESS_UPDATE_ITEM //200
@@ -131,7 +129,8 @@ const excluirDesenvolvedor= async function(id){
             return ERROR_REQUIRED_FIELD //400
         }
 
-    }catch(result){
+    }catch(error){
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
@@ -144,9 +143,9 @@ const listarDesenvolvedor = async function (){
         let dadosDesenvolvedores = {}
 
         //Chama função para retornar os dados do Desenvolvedor
-        let resultDesenvolvedor= await jogoDAO.selectAllDesenvolvedor()
+        let resultDesenvolvedor = await desenvolvedorDAO.selectAllDesenvolvedor()
 
-        if(resultDesenvolvedor != false || typeof(resultJogo) == 'object'){
+        if(resultDesenvolvedor != false || typeof(resultDesenvolvedor) == 'object'){
 
             if(resultDesenvolvedor.length > 0){
 
@@ -167,8 +166,8 @@ const listarDesenvolvedor = async function (){
         }
         
         
-    }catch(erro){
-
+    }catch(error){
+        
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
 
     }

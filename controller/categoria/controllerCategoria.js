@@ -144,7 +144,7 @@ const listarCategoria = async function (){
 
         if(resultCategoria != false || typeof(resultCategoria) == 'object'){
 
-            if(resultJogo.length > 0){
+            if(resultCategoria.length > 0){
 
                 //Cria um objeto Json para retornar a lista de categorias
                 dadosCategorias.status = true
@@ -163,8 +163,7 @@ const listarCategoria = async function (){
         }
         
         
-    }catch(erro){
-
+    }catch(erro){      
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
 
     }

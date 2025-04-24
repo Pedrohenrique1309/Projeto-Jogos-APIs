@@ -43,35 +43,53 @@ const inserirAssinatura = async function(assinatura, contentType){
 
 }
 
-//Função para atualizar uma assinatura
+
+//Função para atualizar uma atualizacao
 const atualizarAssinatura = async function(assinatura, id, contentType){
 
     try{
 
         if(contentType == 'application/json'){
 
-            if( assinatura.nome == undefined ||  assinatura.nome == ''   || assinatura.nome == null   || assinatura.nome.length > 80 ){
+            if( assinatura.nome            == undefined ||  assinatura.nome             == ''   || assinatura.nome            == null   || assinatura.nome.length   > 80   ||
+                id == undefined || id == ''  || id  == null || isNaN(id) || id <= 0
+            ){
 
                 return MESSAGE.ERROR_REQUIRED_FIELD //400
 
             }else{
-                //encaminha os dados da nova assinatura para ser inserido no banco de dados
-                let resultAssinatura = await assinaturaDAO.updateAssinatura(assinatura)
 
-                if(resultAssinatura){
-                    return MESSAGE.SUCESS_UPDATE_ITEM //200
+                //Validar se o id existe no Banco de Dados
+                let resultAssinatura = await buscarAssinatura(parseInt(id))
+
+
+                if(resultAssinatura.status_code == 200){
+                    //Update
+
+                    //Adiciona um atributo id no JSON para encaminhar id da requisição
+                    assinatura.id = parseInt(id)
+                    let result = await assinaturaDAO.updateAssinatura(assinatura)
+
+                    if(result){
+                        return MESSAGE.SUCESS_UPDATE_ITEM //200
+                    }else{
+                        return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                    }
+
+                }else if(resultAssinatura.status_code == 404){
+                    return MESSAGE.ERROR_NOT_FOUND //400
                 }else{
-                    return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+                    return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
                 }
             }
-
+        
         }else{
             return MESSAGE.ERROR_CONTENT_TYPE //415
         }
 
-    } catch(error){
+    }catch(error){
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
-    }   
+    }
 
 }
 
@@ -120,7 +138,7 @@ const listarAssinatura = async function (){
         let dadosAssinaturas = {}
 
         //Chama função para retornar os dados da assinatura
-        let resultAssinatura = await jogoDAO.selectAllJogo()
+        let resultAssinatura = await assinaturaDAO.selectAllAssinatura()
 
         if(resultAssinatura != false || typeof(resultAssinatura) == 'object'){
 

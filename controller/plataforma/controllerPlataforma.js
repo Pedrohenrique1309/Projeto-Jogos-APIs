@@ -23,10 +23,10 @@ const inserirPlataforma = async function(plataforma, contentType){
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELD //400
             }else{
-                //encamnha os dados da nova platafroma para ser inserido no banco de dados
-                let resultJogo = await jogoDAO.insertJogo(jogo)
+                //encamnha os dados da nova platafoRma para ser inserido no banco de dados
+                let resultPlataforma = await plataformaDAO.insertPlataforma(plataforma)
 
-                if(resultJogo){
+                if(resultPlataforma){
                     return MESSAGE.SUCESS_CREATE_ITEM //201
                 }else{
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
@@ -59,7 +59,7 @@ const atualizarPlataforma = async function(plataforma, id, contentType){
             }else{
 
                 //Validar se o id existe no Banco de Dados
-                let resultPlataforma = await buscarJogo(parseInt(id))
+                let resultPlataforma = await buscarPlataforma(parseInt(id))
 
 
                 if(resultPlataforma.status_code == 200){
@@ -138,17 +138,18 @@ const listarPlataforma  = async function (){
         let dadosPlataforma  = {}
 
         //Chama função para retornar os dados da plataforma 
-        let resultPlataforma  = await plataformaDAO.selectAllPlataforma ()
+        let resultPlataforma  = await plataformaDAO.selectAllPlataforma()
+
 
         if(resultPlataforma  != false || typeof(resultPlataforma ) == 'object'){
 
-            if(resultJogo.length > 0){
+            if(resultPlataforma.length > 0){
 
                 //Cria um objeto Json para retornar a lista de plataformas
                 dadosPlataforma.status = true
                 dadosPlataforma.status_code = 200
-                dadosPlataforma.Items = resultJogo.length
-                dadosPlataforma.platforms = resultJogo
+                dadosPlataforma.Items = resultPlataforma.length
+                dadosPlataforma.platforms = resultPlataforma
                 
                 return  dadosPlataforma//200
             }else{
@@ -190,7 +191,7 @@ const buscarPlataforma = async function (id){
                         //Cria um objeto Json para retornar a lista de Plataformas
                         dadosPlataforma.status = true
                         dadosPlataforma.status_code = 200
-                        dadosPlataforma.games = resultJogo
+                        dadosPlataforma.games = resultPlataforma
                         dadosPlataforma.id = id
                         
                         return  dadosPlataforma//200
@@ -215,7 +216,7 @@ const buscarPlataforma = async function (id){
 
 
     }catch(result){
-
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
     
 }

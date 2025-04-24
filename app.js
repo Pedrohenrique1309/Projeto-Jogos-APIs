@@ -34,8 +34,8 @@ const controllerFaixaEtaria = require('./controller/faixaEtaria/controllerFaixaE
 const controllerPlataforma = require('./controller/plataforma/controllerPlataforma.js')
 const controllerVersaoJogo = require('./controller/versaoJogo/controllerVersaoJogo.js')
 const controllerAssinatura = require('./controller/assinatura/controllerAssinatura.js')
-const controllerCategoria = require('./controller/assinatura/controllerCategoria.js')
-const controllerDesenvolvedor = require('./controller/assinatura/controllerDesenvolvedor.js')
+const controllerCategoria = require('./controller/categoria/controllerCategoria.js')
+const controllerDesenvolvedor = require('./controller/desenvolvedor/controllerDesenvolvedor.js')
 
 //Estabelecendo o formato dos dados que deverá chegar no body da requisição (POST ou PUT)
 const bodyParserJSON = bodyParser.json()
@@ -215,6 +215,7 @@ app.post('/v1/controle-jogos/faixa-etaria', cors(), bodyParserJSON, async functi
 
         //Encaminhando os dados do body da requisição para a controller inserir no Banco de Dados 
         let resultFaixaEtaria =  await controllerFaixaEtaria.inserirFaixaEtaria(dadosBody,contentType)
+
 
         response.status(resultFaixaEtaria.status_code)  
         response.json(resultFaixaEtaria)
@@ -471,7 +472,7 @@ app.get('/v1/controle-jogos/assinatura/:id', cors(), async function (request, re
 })
 
 //EndPoint para deletar assinatura no Banco de Dados pelo ID
-app.delete('v1/controle-jogos/assinatura/:id', cors(), async function (request, response) {
+app.delete('/v1/controle-jogos/assinatura/:id', cors(), async function (request, response) {
         
         let idAssinatura = request.params.id
 
@@ -515,7 +516,7 @@ app.post('/v1/controle-jogos/categoria', cors(), bodyParserJSON, async function 
         let resultCategoria =  await controllerCategoria.inserirCategoria(dadosBody,contentType)
 
         response.status(resultCategoria.status_code)
-        response.json(resultJogo)
+        response.json(resultCategoria)
 
 })
 
@@ -543,7 +544,7 @@ app.get('/v1/controle-jogos/categoria/:id', cors(), async function (request, res
 })
 
 //EndPoint para deletar categoria no Banco de Dados pelo ID
-app.delete('v1/controle-jogos/categoria/:id', cors(), async function (request, response) {
+app.delete('/v1/controle-jogos/categoria/:id', cors(), async function (request, response) {
         
         let idCategoria = request.params.id
 
@@ -556,7 +557,7 @@ app.delete('v1/controle-jogos/categoria/:id', cors(), async function (request, r
 })
 
 //EndPoint para atualizar categoria no Banco de Dados pelo ID
-app.put('/v1/controle-jogos/categoria /:id', cors(), bodyParserJSON, async function (request,response) {
+app.put('/v1/controle-jogos/categoria/:id', cors(), bodyParserJSON, async function (request,response) {
         //Recebe content-type da requisição
         let contentType = request.headers['content-type']
 
@@ -566,7 +567,7 @@ app.put('/v1/controle-jogos/categoria /:id', cors(), bodyParserJSON, async funct
         //Recebe os dados da assinatura encainhado no body da requisição
         let dadosBody = request.body
 
-        let resultCategoria  = await controllerCategoria.atualizarCategoria(dadosBody, idAssinatura, contentType)
+        let resultCategoria  = await controllerCategoria.atualizarCategoria(dadosBody, idCategoria, contentType)
 
         response.status(resultCategoria.status_code)  
         response.json(resultCategoria)
@@ -624,7 +625,7 @@ app.delete('/v1/controle-jogos/desenvolvedor/:id', cors(), async function (reque
         let resultDesenvolvedor = await controllerDesenvolvedor.excluirDesenvolvedor(idDesenvolvedor)
 
         response.status(resultDesenvolvedor.status_code)
-        response.json(resultDesenvolvedoro)
+        response.json(resultDesenvolvedor)
 
 })
 
@@ -642,7 +643,7 @@ app.put('/v1/controle-jogos/desenvolvedor/:id', cors(), bodyParserJSON, async fu
         let dadosBody = request.body
 
         let resultDesenvolvedor = await controllerDesenvolvedor.atualizarDesenvolvedor(dadosBody, idDesenvolvedor, contentType)
-
+        
         response.status(resultDesenvolvedor.status_code)
         response.json(resultDesenvolvedor)
 

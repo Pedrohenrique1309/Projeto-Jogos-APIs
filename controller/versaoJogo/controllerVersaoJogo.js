@@ -49,6 +49,7 @@ const atualizarVersaoJogo = async function(versaoJogo, id, contentType){
     try{
 
         if(contentType == 'application/json'){
+            
 
             if( 
                 versaoJogo.nome == undefined ||  versaoJogo.nome == ''   ||  versaoJogo.nome  == null   ||  versaoJogo.nome.length   > 45  ||
@@ -56,8 +57,9 @@ const atualizarVersaoJogo = async function(versaoJogo, id, contentType){
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELD //400
             }else{
+
                 //encaminha os dados da nova versao de jogo para ser inserido no banco de dados
-                let resultVersaoJogo = await versaoJogoDAO.updateVersaoJogo(versaoJogo)
+                let resultVersaoJogo = await versaoJogoDAO.updateVersaoJogo(versaoJogo, id)
 
                 if(resultVersaoJogo){
                     return MESSAGE.SUCESS_UPDATE_ITEM //200
@@ -122,7 +124,7 @@ const listarVersaoJogo = async function (){
         let dadosVersaoJogo = {}
 
         //Chama função para retornar os dados da versao do jogo
-        let resultVersaoJogo = await versaoJogoDAO.selectAllVersaoJogo()
+        let resultVersaoJogo = await versaoJogoDAO.selectAllVersaoJogo()   
 
         if(resultVersaoJogo != false || typeof(resultVersaoJogo) == 'object'){
 
@@ -132,9 +134,9 @@ const listarVersaoJogo = async function (){
                 dadosVersaoJogo.status = true
                 dadosVersaoJogo.status_code = 200
                 dadosVersaoJogo.Items = resultVersaoJogo.length
-                dadosVersaoJogo.gameVersions = resultVersaoJogo
+                dadosVersaoJogo.game_versions = resultVersaoJogo
                 
-                return  dadosJogos//200
+                return  dadosVersaoJogo//200
             }else{
     
                 return MESSAGE.ERROR_NOT_FOUND //404
@@ -174,7 +176,7 @@ const buscarVersaoJogo = async function (id){
                         //Cria um objeto Json para retornar a lista de versao de jogo
                         dadosVersaoJogo.status = true
                         dadosVersaoJogo.status_code = 200
-                        dadosVersaoJogo.gameVersions = dadosVersaoJogo
+                        dadosVersaoJogo.game_versions = resultVersaoJogo
                         
                         return  dadosVersaoJogo//200
 
@@ -203,3 +205,10 @@ const buscarVersaoJogo = async function (id){
     
 }
 
+module.exports ={
+    inserirVersaoJogo,
+    atualizarVersaoJogo,
+    excluirVersaoJogo,
+    listarVersaoJogo,
+    buscarVersaoJogo
+}

@@ -53,7 +53,7 @@ create table tbl_desenvolvedor (
 	id int not null primary key auto_increment,
     nome varchar(80) not null,
     fundacao date,
-    email_suorte varchar(200) not null,
+    email_suporte varchar(200) not null,
     presidente varchar(100) not null
 );
 

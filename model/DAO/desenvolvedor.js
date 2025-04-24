@@ -47,15 +47,15 @@ const insertDesenvolvedor = async function(desenvolvedor){
 }
 
 //Função para atualizar no Banco de Dados um desenvolvedor existente
-const updatetDesenvolvedor = async function(desenvolvedor){
+const updatetDesenvolvedor = async function(desenvolvedor, id){
     
     try{
 
-        let sql = `update tbl_jogo set  nome = '${desenvolvedor.nome}',
+        let sql = `update tbl_desenvolvedor set  nome = '${desenvolvedor.nome}',
                                         fundacao = '${desenvolvedor.fundacao}',
                                         email_suporte ='${desenvolvedor.email_suporte}',
                                         presidente = '${desenvolvedor.presidente}'
-                                    where id = ${desenvolvedor.id} `
+                                    where id = ${id} `
 
         let result = await prisma.$executeRawUnsafe(sql)
 
@@ -67,7 +67,9 @@ const updatetDesenvolvedor = async function(desenvolvedor){
 
         
     }catch(error){
-        return 
+        console.log(error);
+        
+        return false
     }
 
 }

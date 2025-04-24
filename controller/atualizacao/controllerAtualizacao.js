@@ -27,6 +27,7 @@ const inserirAtualizacao = async function(atualizacao, contentType){
             }else{
                 //encamnha os dados da nova atualizacao para ser inseridos no banco de dados
                 let resultAtualizacao = await atualizacaoDAO.insertAtualizacao(atualizacao)
+                
 
                 if(resultAtualizacao){
                     return MESSAGE.SUCESS_CREATE_ITEM //201
@@ -143,6 +144,8 @@ const listarAtualizacao = async function (){
         //Chama função para retornar os dados da atualizacao
         let resultAtualizacao = await atualizacaoDAO.selectAllAtualizacao()
 
+        console.log(resultAtualizacao)
+
         if(resultAtualizacao != false || typeof(resultAtualizacao) == 'object'){
 
             if(resultAtualizacao.length > 0){
@@ -185,7 +188,7 @@ const buscarAtualizacao = async function (id){
             //Chama fução para retornar os dados da atualizacao
             let resultAtualizacao = await atualizacaoDAO.selectByIdAtualizacao(id)
 
-            if(resultAtualizacao !== String(resultAtualizacao)){                
+            if(resultAtualizacao !== String(resultAtualizacao)){             
 
                 if(resultAtualizacao != false || typeof(resultAtualizacao) == 'object'){
 
@@ -199,8 +202,6 @@ const buscarAtualizacao = async function (id){
                         
                         return  dadosAtualizacao//200
 
-                        
-    
                     }else{
             
                         return MESSAGE.ERROR_NOT_FOUND //404

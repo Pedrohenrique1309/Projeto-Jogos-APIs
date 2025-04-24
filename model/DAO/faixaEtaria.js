@@ -17,15 +17,17 @@ const prisma = new PrismaClient()
 const insertFaixaEtaria = async function(faixaEtaria){
 
     try{
-
+        
         let sql = `insert into tbl_faixa_etaria(
                                             idade_indicativa
                                         )values(
-                                            '${faixaEtaria.idade_indicativa}'
+                                           ${faixaEtaria.idade_indicativa}
                                         );`
 
         //Executa o script SQL no BD e AGUARDA o retorno do BD
         let result = await prisma.$executeRawUnsafe(sql)
+
+        console.log(result)
 
         if(result){
             return true
@@ -34,7 +36,6 @@ const insertFaixaEtaria = async function(faixaEtaria){
         }
 
     }catch(error){
-        console.log(error)
         return false
     }
 
@@ -47,7 +48,7 @@ const updateFaixaEtaria = async function(faixaEtaria){
     try{
 
         let sql = `update tbl_faixa_etaria set  
-                                            idadeIndicativa = '${faixaEtaria.idade_indicativa}'
+                                            idade_indicativa = ${faixaEtaria.idade_indicativa}
                                         where id = ${faixaEtaria.id} `
 
         //Executa o script SQL no BD e AGUARDA o retorno do BD                                
@@ -61,6 +62,7 @@ const updateFaixaEtaria = async function(faixaEtaria){
 
         
     }catch(error){
+        console.log(error)
         return 
     }
 

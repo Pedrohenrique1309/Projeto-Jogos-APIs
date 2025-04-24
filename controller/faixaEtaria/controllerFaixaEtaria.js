@@ -19,7 +19,7 @@ const inserirFaixaEtaria = async function(faixaEtaria, contentType){
         if(contentType == 'application/json'){
 
             if( 
-                faixaEtaria.idade_ndicativa == undefined ||  faixaEtaria.idade_ndicativa  == ''   || faixaEtaria.idade_ndicativa  == null   || isNaN(faixaEtaria.idade_ndicativa) || faixaEtaria.idade_ndicativa <= 0  
+                faixaEtaria.idade_indicativa == undefined ||  faixaEtaria.idade_indicativa  == ''   || faixaEtaria.idade_indicativa  == null   || isNaN(faixaEtaria.idade_indicativa) || faixaEtaria.idade_indicativa <= 0  
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELD //400
             }else{
@@ -52,7 +52,7 @@ const atualizarFaixaEtaria = async function(faixaEtaria, id, contentType){
 
             if( 
                 
-                faixaEtaria.idade_ndicativa   == undefined ||  faixaEtaria.idade_ndicativa             == ''   || faixaEtaria.idade_ndicativa          == null   || isNaN(faixaEtaria.idade_ndicativa) || faixaEtaria.idade_ndicativa <= 0    ||
+                faixaEtaria.idade_indicativa   == undefined ||  faixaEtaria.idade_indicativa             == ''   || faixaEtaria.idade_indicativa          == null   || isNaN(faixaEtaria.idade_indicativa) || faixaEtaria.idade_indicativa <= 0    ||
                 id == undefined || id == ''  || id  == null || isNaN(id) || id <= 0
             ){
 
@@ -68,7 +68,7 @@ const atualizarFaixaEtaria = async function(faixaEtaria, id, contentType){
                
                     //Adiciona um atributo id no JSON para encaminhar id da requisição 
                     faixaEtaria.id = parseInt(id)
-                    let result = await faixaEtariaDAO.updatetFaixaEtaria(faixaEtaria)
+                    let result = await faixaEtariaDAO.updateFaixaEtaria(faixaEtaria)
 
                     if(result){
                         return MESSAGE.SUCESS_UPDATE_ITEM //200
@@ -88,6 +88,7 @@ const atualizarFaixaEtaria = async function(faixaEtaria, id, contentType){
         }
 
     }catch(error){
+        console.log(error)
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
@@ -140,7 +141,7 @@ const listarFaixaEtaria = async function (){
 
         if(resultFaixaEtaria!= false || typeof(resultFaixaEtaria) == 'object'){
 
-            if(resultJogo.length > 0){
+            if(resultFaixaEtaria.length > 0){
 
                 //Cria um objeto Json para retornar a lista de faixas etárias
                 dadosFaixasEtarias.status = true
@@ -159,8 +160,7 @@ const listarFaixaEtaria = async function (){
         }
         
         
-    }catch(erro){
-
+    }catch(error){
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
 
     }

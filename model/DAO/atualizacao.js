@@ -110,7 +110,6 @@ const selectAllAtualizacao = async function(){
         }
             
     }catch(error) {
-        console.log(error)
         return false
     } 
 
@@ -122,7 +121,7 @@ const selectByIdAtualizacao = async function(id){
     try{
         
         //Script SQL para retornar dados de um jogo pelo seu id
-        let sql = `select * from tbl_atuaizacao where id=${id}`
+        let sql = `select * from tbl_atualizacao where id=${id}`
         
         //Executa o Script SQL e aguarda o retorno dos dados
         let result = await prisma.$queryRawUnsafe(sql)
