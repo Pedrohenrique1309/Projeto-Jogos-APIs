@@ -11,6 +11,9 @@ const MESSAGE = require('../../modulo/config.js')
 //Import do DAO para realizar CRUD no banco de dados
 const jogoDAO = require('../../model/DAO/jogo.js')
 
+//Import de controllers para criar as relações com o jogo
+const controllerFaixaEtaria = require('../faixaEtaria/controllerFaixaEtaria.js')
+
 //Função para inserir um novo jogo
 const inserirJogo = async function(jogo, contentType){
 
@@ -24,7 +27,8 @@ const inserirJogo = async function(jogo, contentType){
                 jogo.tamanho         == undefined ||  jogo.tamanho.length   > 10    ||
                 jogo.descricao       == undefined || 
                 jogo.foto_capa       == undefined ||  jogo.foto_capa.length > 200   ||
-                jogo.link            == undefined ||  jogo.link.length      > 200      
+                jogo.link            == undefined ||  jogo.link.length      > 200   ||
+                jogo.id_faixa_etaria == undefined ||  jogo.id_faixa_etaria == ''   
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELD //400
             }else{
@@ -55,14 +59,16 @@ const atualizarJogo = async function(jogo, id, contentType){
 
         if(contentType == 'application/json'){
 
-            if( jogo.nome            == undefined ||  jogo.nome             == ''   || jogo.nome            == null   || jogo.nome.length   > 80   ||
+            if( 
+                id == undefined || id == ''  || id  == null || isNaN(id) || id <= 0 ||
+                jogo.nome            == undefined ||  jogo.nome             == ''   || jogo.nome            == null   || jogo.nome.length   > 80   ||
                 jogo.data_lancamento == undefined ||  jogo.data_lancamento  == ''   || jogo.data_lancamento == null   || jogo.versao.length > 10   ||
                 jogo.versao          == undefined ||  jogo.versao           == ''   || jogo.versao          == null   || jogo.versao.length > 10   ||
                 jogo.tamanho         == undefined ||  jogo.tamanho.length   > 10    ||
                 jogo.descricao       == undefined || 
                 jogo.foto_capa       == undefined ||  jogo.foto_capa.length > 200   ||
                 jogo.link            == undefined ||  jogo.link.length      > 200   ||
-                id == undefined || id == ''  || id  == null || isNaN(id) || id <= 0
+                jogo.id_faixa_etaria == undefined ||  jogo.id_faixa_etaria == '' 
             ){
 
                 return MESSAGE.ERROR_REQUIRED_FIELD //400
@@ -178,6 +184,9 @@ const listarJogo = async function (){
 
     try{
 
+        //Objeto array para utilizar forEach para carregar os dados do jogo e faixa etária
+        let arrayJogos = []
+
         let dadosJogos = {}
 
         //Chama função para retornar os dados do jogo
@@ -191,9 +200,31 @@ const listarJogo = async function (){
                 dadosJogos.status = true
                 dadosJogos.status_code = 200
                 dadosJogos.Items = resultJogo.length
-                dadosJogos.games = resultJogo
+                //dadosJogos.games = resultJogo
+
+                //substitui o forEach para trabalhar com await e async
+                for(itemJogo of resultJogo){
+
+                    /************* RETORA DADOS DA FAIXA ETARIA PARA COLOCAR NO RETORNO DO JOGO****************/
+                    //Busca os dados da faixa etária na controller de faixa etaria
+                    //utilizando o ID da faixa etária (chave estrangeira)
+                    let dadosFaixaEtaria = await controllerFaixaEtaria.buscarFaixaEtaria(itemJogo.id_faixa_etaria)
+
+                    //Adicionao um atributo "faixa_etaria" no JSON de jogo
+                    itemJogo.feixa_etaria = dadosFaixaEtaria.feixa_etaria
+
+                    //Remove o atributo id_faixa_etaria do JSON de jogo, pois ja temos o ID dentro dos dados da faixa etária
+                    delete itemJogo.id_faixa_etaria
+
+                    arrayJogos.push(itemJogo)
+                
+                }
+
+                //Adiciona o novo objeto array de jogos no JSON para retornar ao APP
+                dadosJogos.games = arrayJogos
                 
                 return  dadosJogos//200
+
             }else{
     
                 return MESSAGE.ERROR_NOT_FOUND //404
@@ -233,9 +264,28 @@ const buscarJogo = async function (id){
                         //Cria um objeto Json para retornar a lista de jogos
                         dadosJogo.status = true
                         dadosJogo.status_code = 200
-                        dadosJogo.games = resultJogo
                         dadosJogo.id = id
+
+                        //substitui o forEach para trabalhar com await e async
+                        for(itemJogo of resultJogo){
+
+                            /************* RETORA DADOS DA FAIXA ETARIA PARA COLOCAR NO RETORNO DO JOGO****************/
+                            //Busca os dados da faixa etária na controller de faixa etaria
+                            //utilizando o ID da faixa etária (chave estrangeira)
+                            let dadosFaixaEtaria = await controllerFaixaEtaria.buscarFaixaEtaria(itemJogo.id_faixa_etaria)
+
+                            //Adicionao um atributo "faixa_etaria" no JSON de jogo
+                            itemJogo.feixa_etaria = dadosFaixaEtaria.feixa_etaria
+
+                            //Remove o atributo id_faixa_etaria do JSON de jogo, pois ja temos o ID dentro dos dados da faixa etária
+                            delete itemJogo.id_faixa_etaria
+
+                            arrayJogos.push(itemJogo)
+                            
+                        }
                         
+                        dadosJogo.games = arrayJogos
+
                         return  dadosJogo//200
 
                         

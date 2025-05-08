@@ -57,6 +57,21 @@ create table tbl_desenvolvedor (
     presidente varchar(100) not null
 );
 
+create table tbl_jogo_categoria (  
+
+    id             int not null primary key auto_increment,
+    id_jogo        int not null,
+    id_categoria   int not null,
+   
+   constraint FK_JOGO_JOGO_CATEGORIA
+    foreign key (id_jogo) 
+    references tbl_jogo(id)
+
+    constraint FK_CATEGORIA_JOGO_CATEGORIA
+    foreign key (id_categoria)
+    references tbl_categoria(id)
+);
+
 show tables;
 desc tbl_jogo;
 select * from tbl_jogo
