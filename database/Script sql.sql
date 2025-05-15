@@ -13,8 +13,14 @@ create table tbl_jogo (
     tamanho varchar(10),
     descricao text,
     foto_capa varchar(200),
-    link varchar(200)
+    link varchar(200),
+    id_faixa_etaria INT,
+    
+    FOREIGN KEY (id_faixa_etaria)
+	REFERENCES tbl_faixa_etaria(id)
 );
+
+
 
 create table tbl_atualizacao (
 	id int not null primary key auto_increment,
@@ -57,20 +63,18 @@ create table tbl_desenvolvedor (
     presidente varchar(100) not null
 );
 
-create table tbl_jogo_categoria (  
-
-    id             int not null primary key auto_increment,
-    id_jogo        int not null,
-    id_categoria   int not null,
-   
-   constraint FK_JOGO_JOGO_CATEGORIA
-    foreign key (id_jogo) 
-    references tbl_jogo(id)
-
-    constraint FK_CATEGORIA_JOGO_CATEGORIA
-    foreign key (id_categoria)
-    references tbl_categoria(id)
+create table tbl_jogo_categoria (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_jogo INT NOT NULL,
+    id_categoria INT NOT NULL,
+    
+    CONSTRAINT FK_JOGO_JOGO_CATEGORIA
+    FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id),
+    
+    CONSTRAINT FK_CATEGORIA_JOGO_CATEGORIA 
+    FOREIGN KEY (id_categoria) REFERENCES tbl_categoria(id)
 );
+
 
 show tables;
 desc tbl_jogo;

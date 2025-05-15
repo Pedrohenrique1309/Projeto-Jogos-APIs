@@ -87,7 +87,8 @@ app.get('/v1/controle-jogos/jogo/:id', cors(), async function (request, response
 
         //Chama a função para listar os jogos 
         let resultJogo = await controllerJogo.buscarJogo(idJogo)
-
+        
+        
         response.status(resultJogo.status_code)
         response.json(resultJogo)
 

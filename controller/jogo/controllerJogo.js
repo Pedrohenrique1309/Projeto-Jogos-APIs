@@ -13,6 +13,7 @@ const jogoDAO = require('../../model/DAO/jogo.js')
 
 //Import de controllers para criar as relações com o jogo
 const controllerFaixaEtaria = require('../faixaEtaria/controllerFaixaEtaria.js')
+const controllerJogoCategoria = require('./controllerJogoCategoria.js')
 
 //Função para inserir um novo jogo
 const inserirJogo = async function(jogo, contentType){
@@ -34,18 +35,19 @@ const inserirJogo = async function(jogo, contentType){
             }else{
                 //encamnha os dados do novo jogo para ser inserido no banco de dados
                 let resultJogo = await jogoDAO.insertJogo(jogo)
-
+                
                 if(resultJogo){
                     return MESSAGE.SUCESS_CREATE_ITEM //201
                 }else{
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
                 }
             }
+        
 
         }else{
             return MESSAGE.ERROR_CONTENT_TYPE //415
         }
-
+    
     } catch(error){
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }   
@@ -205,19 +207,25 @@ const listarJogo = async function (){
                 //substitui o forEach para trabalhar com await e async
                 for(itemJogo of resultJogo){
 
-                    /************* RETORA DADOS DA FAIXA ETARIA PARA COLOCAR NO RETORNO DO JOGO****************/
+                    /************* RETORNA DADOS DA FAIXA ETARIA PARA COLOCAR NO RETORNO DO JOGO****************/
+                        
                     //Busca os dados da faixa etária na controller de faixa etaria
-                    //utilizando o ID da faixa etária (chave estrangeira)
-                    let dadosFaixaEtaria = await controllerFaixaEtaria.buscarFaixaEtaria(itemJogo.id_faixa_etaria)
+                        //utilizando o ID da faixa etária (chave estrangeira)
+                        let dadosFaixaEtaria = await controllerFaixaEtaria.buscarFaixaEtaria(itemJogo.id_faixa_etaria)
 
-                    //Adicionao um atributo "faixa_etaria" no JSON de jogo
-                    itemJogo.feixa_etaria = dadosFaixaEtaria.feixa_etaria
+                        //Adicionao um atributo "faixa_etaria" no JSON de jogo
+                        itemJogo.faixa_etaria = dadosFaixaEtaria.ageGroups
+                        
+                        //Remove o atributo id_faixa_etaria do JSON de jogo, pois ja temos o ID dentro dos dados da faixa etária
+                        delete itemJogo.id_faixa_etaria
 
-                    //Remove o atributo id_faixa_etaria do JSON de jogo, pois ja temos o ID dentro dos dados da faixa etária
-                    delete itemJogo.id_faixa_etaria
+                    /**************  RETORNA OS DADOS DA CATEGORIA PARA COLOCAR NO RETORNO DO JOGO **********/
+                    
+                        let dadosJogoCategoria = await controllerJogoCategoria.buscarJogoPorCategoria(itemJogo.id)  
+                        itemJogo.categoria = dadosJogoCategoria.categorys
 
                     arrayJogos.push(itemJogo)
-                
+
                 }
 
                 //Adiciona o novo objeto array de jogos no JSON para retornar ao APP
@@ -250,7 +258,9 @@ const buscarJogo = async function (id){
 
         if(id != '' && id != undefined && id != null && !isNaN(id) && id > 0){
 
-            let dadosJogo = {}
+            let arrayJogos = []
+
+            let dadosJogos = {}
 
             //Chama fução para retornar os dados do jogo
             let resultJogo = await jogoDAO.selectByIdJogo(id)
@@ -260,34 +270,41 @@ const buscarJogo = async function (id){
                 if(resultJogo != false || typeof(resultJogo) == 'object'){
 
                     if(resultJogo.length > 0){
-        
-                        //Cria um objeto Json para retornar a lista de jogos
-                        dadosJogo.status = true
-                        dadosJogo.status_code = 200
-                        dadosJogo.id = id
 
+                        //Cria um objeto Json para retornar a lista de jogos
+                        dadosJogos.status = true
+                        dadosJogos.status_code = 200
+                        dadosJogos.Items = resultJogo.length
+                        //dadosJogos.games = resultJogo
+        
                         //substitui o forEach para trabalhar com await e async
                         for(itemJogo of resultJogo){
-
-                            /************* RETORA DADOS DA FAIXA ETARIA PARA COLOCAR NO RETORNO DO JOGO****************/
+        
+                            /************* RETORNA DADOS DA FAIXA ETARIA PARA COLOCAR NO RETORNO DO JOGO****************/
+                                
                             //Busca os dados da faixa etária na controller de faixa etaria
-                            //utilizando o ID da faixa etária (chave estrangeira)
-                            let dadosFaixaEtaria = await controllerFaixaEtaria.buscarFaixaEtaria(itemJogo.id_faixa_etaria)
-
-                            //Adicionao um atributo "faixa_etaria" no JSON de jogo
-                            itemJogo.feixa_etaria = dadosFaixaEtaria.feixa_etaria
-
-                            //Remove o atributo id_faixa_etaria do JSON de jogo, pois ja temos o ID dentro dos dados da faixa etária
-                            delete itemJogo.id_faixa_etaria
-
-                            arrayJogos.push(itemJogo)
+                                //utilizando o ID da faixa etária (chave estrangeira)
+                                let dadosFaixaEtaria = await controllerFaixaEtaria.buscarFaixaEtaria(itemJogo.id_faixa_etaria)
+        
+                                //Adicionao um atributo "faixa_etaria" no JSON de jogo
+                                itemJogo.faixa_etaria = dadosFaixaEtaria.ageGroups
+                                
+                                //Remove o atributo id_faixa_etaria do JSON de jogo, pois ja temos o ID dentro dos dados da faixa etária
+                                delete itemJogo.id_faixa_etaria
+        
+                            /**************  RETORNA OS DADOS DA CATEGORIA PARA COLOCAR NO RETORNO DO JOGO **********/
                             
+                                let dadosJogoCategoria = await controllerJogoCategoria.buscarJogoPorCategoria(itemJogo.id)  
+                                itemJogo.categoria = dadosJogoCategoria.categorys
+        
+                            arrayJogos.push(itemJogo)
+        
                         }
+        
+                        //Adiciona o novo objeto array de jogos no JSON para retornar ao APP
+                        dadosJogos.games = arrayJogos
                         
-                        dadosJogo.games = arrayJogos
-
-                        return  dadosJogo//200
-
+                        return  dadosJogos//200        
                         
     
                     }else{

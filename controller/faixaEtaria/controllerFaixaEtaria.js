@@ -25,7 +25,7 @@ const inserirFaixaEtaria = async function(faixaEtaria, contentType){
             }else{
                 //encamnha os dados da nova faixa etária para ser inserido no banco de dados
                 let resultFaixaEtaria = await faixaEtariaDAO.insertFaixaEtaria(faixaEtaria)
-
+                
                 if(resultFaixaEtaria){
                     return MESSAGE.SUCESS_CREATE_ITEM //201
                 }else{

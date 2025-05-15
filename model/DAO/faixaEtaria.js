@@ -21,14 +21,12 @@ const insertFaixaEtaria = async function(faixaEtaria){
         let sql = `insert into tbl_faixa_etaria(
                                             idade_indicativa
                                         )values(
-                                           ${faixaEtaria.idade_indicativa}
+                                           '${faixaEtaria.idade_indicativa}'
                                         );`
 
         //Executa o script SQL no BD e AGUARDA o retorno do BD
         let result = await prisma.$executeRawUnsafe(sql)
-
-        console.log(result)
-
+  
         if(result){
             return true
         }else{

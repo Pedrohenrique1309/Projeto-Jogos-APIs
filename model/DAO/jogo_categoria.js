@@ -37,4 +37,103 @@ const insertJogoCategoria = async function(jogoCategoria) {
         
         return false
     }
+}
+
+//Função para atualizar um JogoCategoria existente
+const updateJogoCategoria = async function(jogoCategoria){
+  try {
+      let sql = `update tbl_jogo_categoria set      id_jogo           = ${jogoCategoria.id_jogo},
+                                                    id_categoria      = ${jogoCategoria.id_categoria}
+                                        
+                            where id = ${jogoCategoria.id}                
+                            `
+      let resultJogoCategoria = await prisma.$executeRawUnsafe(sql)
+
+      if(resultJogoCategoria)
+        return true
+      else
+        return false
+  } catch (error) {
+    return false
   }
+}
+
+//Função para excluir um JogoCategoria existente
+const deleteJogoCategoria = async function(id){
+  try {
+      let sql = `delete from tbl_jogo_categoria where id = ${id}`
+
+      let resultJogoCategoria = await prisma.$executeRawUnsafe(sql)
+
+      if(resultJogoCategoria)
+        return true
+      else
+        return false
+  } catch (error) {
+    return false
+  }
+}
+
+//Função para retornar todos os JogoCategorias existentes
+const selectAllJogoCategoria = async function(){
+  try {
+      let sql = `select * from tbl_jogo_categoria`
+
+      let resultJogoCategoria = await prisma.$queryRawUnsafe(sql)
+
+      if(resultJogoCategoria)
+        return resultJogoCategoria
+      else
+        return false
+  } catch (error) {
+    return false
+  }
+}
+
+//Função para buscar um JogoCategoria existente pelo ID
+const selectByIdJogoCategoria = async function(id){
+  try {
+      let sql = `select * from tbl_jogo_categoria where id = ${id}`
+
+      let resultJogoCategoria = await prisma.$queryRawUnsafe(sql)
+
+      if(resultJogoCategoria)
+        return resultJogoCategoria
+      else
+        return false
+  } catch (error) {
+    return false
+  }
+}
+
+//Função que retornar os dados do Jogo filtrado pela categoria
+const selectJogoByCategoria = async function(idCategoria){
+  try {
+      let sql = `select  tbl_jogo.* from tbl_jogo 
+                      inner join tbl_jogo_categoria 
+                        on tbl_jogo.id = tbl_jogo_categoria.id_jogo
+                      inner join tbl_categoria
+                        on tbl_categoria.id = tbl_jogo_categoria.id_categoria
+                  where tbl_categoria = ${idCategoria}`
+
+      let resultJogoCategoria = await prisma.$queryRawUnsafe(sql)
+
+      if(resultJogoCategoria)
+        return resultJogoCategoria
+      else
+        return false
+  } catch (error) {
+    return false
+  }
+}
+
+//Exporta as funções para serem utilizadas em outros módulos
+module.exports = {
+    insertJogoCategoria,
+    updateJogoCategoria,
+    deleteJogoCategoria,
+    selectAllJogoCategoria,
+    selectByIdJogoCategoria,
+    selectJogoByCategoria
+}
+
