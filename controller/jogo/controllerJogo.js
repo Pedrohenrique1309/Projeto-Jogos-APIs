@@ -22,14 +22,14 @@ const inserirJogo = async function(jogo, contentType){
         
         if(contentType == 'application/json'){
 
-            if( jogo.nome            == undefined ||  jogo.nome             == ''   || jogo.nome            == null   || jogo.nome.length   > 80   ||
-                jogo.data_lancamento == undefined ||  jogo.data_lancamento  == ''   || jogo.data_lancamento == null   || jogo.versao.length > 10   ||
-                jogo.versao          == undefined ||  jogo.versao           == ''   || jogo.versao          == null   || jogo.versao.length > 10   ||
-                jogo.tamanho         == undefined ||  jogo.tamanho.length   > 10    ||
-                jogo.descricao       == undefined || 
-                jogo.foto_capa       == undefined ||  jogo.foto_capa.length > 200   ||
-                jogo.link            == undefined ||  jogo.link.length      > 200   ||
-                jogo.id_faixa_etaria == undefined ||  jogo.id_faixa_etaria == ''   
+            if( jogo.nome            == undefined  ||  jogo.nome             == ''   || jogo.nome            == null   || jogo.nome.length   > 80   ||
+                jogo.data_lancamento == undefined  ||  jogo.data_lancamento  == ''   || jogo.data_lancamento == null   || jogo.versao.length > 10   ||
+                jogo.versao          == undefined  ||  jogo.versao           == ''   || jogo.versao          == null   || jogo.versao.length > 10   ||
+                jogo.tamanho         == undefined  ||  jogo.tamanho.length   > 10    ||
+                jogo.descricao       == undefined  || 
+                jogo.foto_capa       == undefined  ||  jogo.foto_capa.length > 200   ||
+                jogo.link            == undefined  ||  jogo.link.length      > 200   ||
+                 jogo.id_faixa_etaria == undefined ||  jogo.id_faixa_etaria == ''    || jogo.id_faixa_etaria  == null || isNaN(jogo.id_faixa_etaria) || jogo.id_faixa_etaria <= 0 
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELD //400
             }else{
@@ -70,7 +70,7 @@ const atualizarJogo = async function(jogo, id, contentType){
                 jogo.descricao       == undefined || 
                 jogo.foto_capa       == undefined ||  jogo.foto_capa.length > 200   ||
                 jogo.link            == undefined ||  jogo.link.length      > 200   ||
-                jogo.id_faixa_etaria == undefined ||  jogo.id_faixa_etaria == '' 
+                jogo.id_faixa_etaria == undefined ||  jogo.id_faixa_etaria == ''    || jogo.id_faixa_etaria  == null || isNaN(jogo.id_faixa_etaria) || jogo.id_faixa_etaria <= 0 
             ){
 
                 return MESSAGE.ERROR_REQUIRED_FIELD //400

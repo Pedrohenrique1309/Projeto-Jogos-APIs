@@ -63,6 +63,16 @@ create table tbl_desenvolvedor (
     presidente varchar(100) not null
 );
 
+create table tbl_avaliacao (
+    id int not null primary key auto_increment,
+    comentario text not null,
+    pontuacao int not null,
+    id_jogo int not null,
+
+    CONSTRAINT FK_JOGO_JOGO_CATEGORIA
+    FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id),
+),
+
 create table tbl_jogo_categoria (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     id_jogo INT NOT NULL,
@@ -74,6 +84,68 @@ create table tbl_jogo_categoria (
     CONSTRAINT FK_CATEGORIA_JOGO_CATEGORIA 
     FOREIGN KEY (id_categoria) REFERENCES tbl_categoria(id)
 );
+
+create table tbl_jogo_desenvolvedor (
+    id int not null auto_increment,
+    id_desenvolvedor int not null,
+    id_jogo int not null
+
+    CONSTRAINT fk_desenvolvedor_jogo_desenvolvedor
+    FOREIGN KEY (id_desenvolvedor) REFERENCES tbl_desenvolvedor(id)
+
+    CONSTRAINT fk_jogo_jogo_desenvolvedor
+    FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id)
+
+);
+
+create table tbl_plataforma_jogo_atualizacao (
+    id int not null auto_increment,
+    id_plataforma int not null,
+    id_jogo int not null,
+    id_atualizacao int not null
+
+    CONSTRAINT fk_plataforma_plataforma_jogo_atualizacao
+    FOREIGN KEY (id_plataforma) REFERENCES tbl_plataforma(id)
+
+    CONSTRAINT fk_jogo_plataforma_jogo_atualizacao
+    FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id)
+
+    CONSTRAINT fk_atualizacao_plataforma_jogo_atualizacao
+    FOREIGN KEY (id_atualizacao) REFERENCES tbl_atualizacao(id)
+
+);
+
+create table tbl_jogo_plataforma_versao (
+    id int not null auto_increment,
+    id_jogo int not null,
+    id_plataforma int not null,
+    id_versao int not null
+
+    CONSTRAINT fk_jogo_plataforma_jogo_versao
+    FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id)
+
+    CONSTRAINT fk_plataforma_plataforma_jogo_versao
+    FOREIGN KEY (id_plataforma) REFERENCES tbl_plataforma(id)
+
+    CONSTRAINT fk_atualizacao_plataforma_jogo_versao
+    FOREIGN KEY (id_versao) REFERENCES tbl_versao(id)
+
+);
+
+create table tbl_plataforma_assinatura(
+    id int not null auto_increment,
+    id_plataforma int not null,
+    id_assinatura int not null
+
+    CONSTRAINT fk_plataforma_plataforma_assinatura
+    FOREIGN KEY (id_plataforma) REFERENCES tbl_plataforma(id)
+
+    CONSTRAINT fk_assinatura_plataforma_assinatura
+    FOREIGN KEY (id_assinatura) REFERENCES tbl_assinatura(id)
+
+;)
+
+
 
 
 show tables;
