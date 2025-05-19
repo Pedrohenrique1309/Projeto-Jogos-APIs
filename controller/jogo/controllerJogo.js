@@ -16,6 +16,8 @@ const controllerFaixaEtaria = require('../faixaEtaria/controllerFaixaEtaria.js')
 const controllerJogoCategoria = require('./controllerJogoCategoria.js')
 const controllerJogoDesenvolvedor = require('./controllerJogoDesenvolvedor.js')
 const controllerPlataformaJogoAtualizacao = require('./controllerPlataformaJogoAtualizacao.js')
+const controllerJogoPlataformaVersao = require('./controllerJogoPlataformaVersao.js')
+
 //Função para inserir um novo jogo
 const inserirJogo = async function(jogo, contentType){
 
@@ -235,9 +237,14 @@ const listarJogo = async function (){
                         let dadosJogoPlataforma = await controllerPlataformaJogoAtualizacao.buscarJogoPorPlataforma(itemJogo.id)
                         itemJogo.plataforma = dadosJogoPlataforma.platforms
 
-                    /**************  RETORNA OS DADOS DA VERSÃO PARA COLOCAR NO RETORNO DO JOGO **********/
+                    /**************  RETORNA OS DADOS DA ATUALIZACAO PARA COLOCAR NO RETORNO DO JOGO **********/
 
-                        let dadosJogoVersao = await controllerPlataformaJogoAtualizacao.buscarVersaoPorJogo(itemJogo.id)
+                        let dadosAtualizacao = await controllerPlataformaJogoAtualizacao.buscarAtualizacaoPorJogo(itemJogo.id)
+                        itemJogo.atualizacao = dadosJogoAtualizacao.updates
+
+     0               /**************  RETORNA OS DADOS DA VERSÃO PARA COLOCAR NO RETORNO DO JOGO **********/
+
+                        let dadosJogoVersao = await controllerJogoPlataformaVersao.buscarVersaoPorJogo(itemJogo.id)
                         itemJogo.versao = dadosJogoVersao.versions
 
                     arrayJogos.push(itemJogo)
@@ -315,8 +322,23 @@ const buscarJogo = async function (id){
         
                             /**************  RETORNA OS DADOS DO DESENVOLVEDOR PARA COLOCAR NO RETORNO DO JOGO **********/
 
-                            let dadosJogoDesenvolvedor = await controllerJogoDesenvolvedor.buscarJogoPorDesenvolvedor(itemJogo.id)
-                            itemJogo.desenvolvedor = dadosJogoDesenvolvedor.developers
+                                let dadosJogoDesenvolvedor = await controllerJogoDesenvolvedor.buscarJogoPorDesenvolvedor(itemJogo.id)
+                                itemJogo.desenvolvedor = dadosJogoDesenvolvedor.developers
+
+                            /**************  RETORNA OS DADOS DA PLATAFORMA PARA COLOCAR NO RETORNO DO JOGO **********/
+
+                                let dadosJogoPlataforma = await controllerPlataformaJogoAtualizacao.buscarJogoPorPlataforma(itemJogo.id)
+                                itemJogo.plataforma = dadosJogoPlataforma.platforms
+
+                            /**************  RETORNA OS DADOS DA ATUALIZACAO PARA COLOCAR NO RETORNO DO JOGO **********/
+
+                                let dadosAtualizacao = await controllerPlataformaJogoAtualizacao.buscarAtualizacaoPorJogo(itemJogo.id)
+                                itemJogo.atualizacao = dadosAtualizacao.updates
+
+            0               /**************  RETORNA OS DADOS DA VERSÃO PARA COLOCAR NO RETORNO DO JOGO **********/
+
+                                let dadosJogoVersao = await controllerJogoPlataformaVersao.buscarVersaoPorJogo(itemJogo.id)
+                                itemJogo.versao = dadosJogoVersao.versions
                         
                             arrayJogos.push(itemJogo)
         

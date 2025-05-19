@@ -206,7 +206,7 @@ const selectAtualizacaoByPlataforma = async function(idPlataforma){
                           inner join tbl_plataforma_jogo_atualizacao
                             on tbl_plataforma.id = tbl_plataforma_jogo_atualizacao.id_plataforma
                           inner join tbl_atualizacao
-                            on tbl_atualizacao.id = tbl_plataforma_jogo_atualizacao.id_plataforma
+                            on tbl_atualizacao.id = tbl_plataforma_jogo_atualizacao.id_atualizacao
                       where tbl_plataforma.id = ${idPlataforma}`
 
       let result = await prisma.$queryRawUnsafe(sql)
@@ -227,7 +227,7 @@ const selectPlataformaByAtualizacao = async function(idAtualizacao){
                           inner join tbl_plataforma_jogo_atualizacao
                             on tbl_plataforma.id = tbl_plataforma_jogo_atualizacao.id_plataforma
                           inner join tbl_atualizacao
-                            on tbl_plataforma.id = tbl_plataforma_jogo_atualizacao.id_plataforma
+                            on tbl_atualizacao.id = tbl_plataforma_jogo_atualizacao.id_atualizacao
                       where tbl_atualizacao.id = ${idAtualizacao}`
 
       let result = await prisma.$queryRawUnsafe(sql)

@@ -96,7 +96,7 @@ const excluirPlataformaJogoAtualizacao = async function(id){
             let resultPlataformaJogoAtualizacao = await plataformaJogoAtualizacaoDAO.selectByIdPlataformaJogoAtuazalizacao(parseInt(id)) 
 
             if (resultPlataformaJogoAtualizacao != false || typeof(resultPlataformaJogoAtualizacao) == 'object'){
-                if (resultJogoDesenvolvedor.length == 0){
+                if (resultPlataformaJogoAtualizacao.length > 0){
                     //chama a função para excluir no Banco de Dados e aguarda o retorno o retorno da função
                     let result = await plataformaJogoAtualizacaoDAO.deletePlataformaJogoAtuazalizacao(parseInt(id))
 
@@ -186,7 +186,7 @@ const buscarJogoPorPlataforma = async function(idPlataforma){
 
 }
 
-const buscarVersaoPorJogo = async function(idJogo){
+const buscarAtualizacaoPorJogo = async function(idJogo){
 
     try{
 
@@ -194,18 +194,18 @@ const buscarVersaoPorJogo = async function(idJogo){
             return MESSAGE.ERROR_REQUIRED_FIELD //400
         }else{
 
-            dadosJogoVersao = {}
-            let resultVersao = await plataformaJogoAtualizacaoDAO.selectAtualizacaoByJogo(parseInt(idJogo))
+            dadosJogoAtualizacao = {}
+            let resultAtualizacao = await plataformaJogoAtualizacaoDAO.selectAtualizacaoByJogo(parseInt(idJogo))
 
-            if (resultVersao != false || typeof(resultVersa) == 'object'){
-                if (resultVersao.length > 0){
+            if (resultAtualizacao != false || typeof(resultAtualizacao) == 'object'){
+                if (resultAtualizacao.length > 0){
 
                     //Criando JSON de retorno de dados da API
-                    dadosJogoVersao.status = true
-                    dadosJogoVersao.status_code = 200
-                    dadosJogoVersao.versao= resultVersao
+                    dadosJogoAtualizacao.status = true
+                    dadosJogoAtualizacao.status_code = 200
+                    dadosJogoAtualizacao.atualizacao= resultAtualizacao
 
-                    return dadosJogoVersao //200
+                    return dadosJogoAtualizacao //200
 
                 }else{
                     return MESSAGE.ERROR_NOT_FOUND //404
@@ -229,5 +229,5 @@ module.exports = {
     listarPlataformaJogoAtualizacao,
     buscarJogoPorPlataforma,
     buscarJogoPorPlataforma,
-    buscarVersaoPorJogo
+    buscarAtualizacaoPorJogo
 }

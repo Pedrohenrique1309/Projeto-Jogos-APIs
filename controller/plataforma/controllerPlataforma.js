@@ -10,6 +10,7 @@ const MESSAGE = require('../../modulo/config.js')
 
 //Import do DAO para realizar CRUD no banco de dados
 const plataformaDAO = require('../../model/DAO/plataforma.js')
+const controllerPlataformaAssinatura = require('./controllerPlataformaAssinatura.js')
 
 //Função para inserir uma nova plataforma
 const inserirPlataforma = async function(plataforma, contentType){
@@ -149,6 +150,15 @@ const listarPlataforma  = async function (){
                 dadosPlataforma.status = true
                 dadosPlataforma.status_code = 200
                 dadosPlataforma.Items = resultPlataforma.length
+
+                for (itemPlataforma of resultPlataforma){
+
+                    let dadosAssinatura = await controllerPlataformaAssinatura.buscarPlataformaPorAssinatura(itemPlataforma.id_assinatura)
+
+                    itemPlataforma.ssinatura = dadosAssinatura.signatures
+
+                }
+
                 dadosPlataforma.platforms = resultPlataforma
                 
                 return  dadosPlataforma//200
