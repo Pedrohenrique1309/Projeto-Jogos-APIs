@@ -730,3 +730,4 @@ app.put('/v1/controle-jogos/avaliacao/:id', cors(), bodyParserJSON, async functi
 app.listen('8080', function(){
         console.log('API aguardando Requisições...')
 })
+

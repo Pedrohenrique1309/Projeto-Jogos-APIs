@@ -248,7 +248,6 @@ const listarJogo = async function (){
                 dadosJogos.games = arrayJogos
                 
                 return  dadosJogos//200
-                
 
             }else{
     
