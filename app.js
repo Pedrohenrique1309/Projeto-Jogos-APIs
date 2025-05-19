@@ -36,6 +36,7 @@ const controllerVersaoJogo = require('./controller/versaoJogo/controllerVersaoJo
 const controllerAssinatura = require('./controller/assinatura/controllerAssinatura.js')
 const controllerCategoria = require('./controller/categoria/controllerCategoria.js')
 const controllerDesenvolvedor = require('./controller/desenvolvedor/controllerDesenvolvedor.js')
+const controllerAvaliacao = require('./controller/avaliacao/controllerAvaliacao.js')
 
 //Estabelecendo o formato dos dados que deverá chegar no body da requisição (POST ou PUT)
 const bodyParserJSON = bodyParser.json()
@@ -650,6 +651,81 @@ app.put('/v1/controle-jogos/desenvolvedor/:id', cors(), bodyParserJSON, async fu
 
 })
 
+'==================================================================== CRUD AVALIAÇÃO ================================================================================='
+
+//EndPoint para inserir uma avaliação no Banco de Dados 
+app.post('/v1/controle-jogos/avaliacao', cors(), bodyParserJSON, async function (request,response) {
+        
+        //Recebe o content type para validar o tipo de dados da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o conteúdo do body da requisição
+        let dadosBody = request.body
+
+        //Encaminhando os dados do body da requisição para a controller inserir no Banco de Dados 
+        let resultAvaliacao =  await controllerAvaliacao.inserirAvaliacao(dadosBody,contentType)
+
+        response.status(resultAvaliacao.status_code)
+        response.json(resultAvaliacao)
+
+})
+
+//EndPoint para listar todos avaliações no Banco de Dados
+app.get('/v1/controle-jogos/avaliacao', cors(), async function (request, response) {
+        
+        //Chama a função para listar as avaliações
+        let resultAvaliacao = await controllerAvaliacao.listarAvaliacao()
+
+        response.status(resultAvaliacao.status_code)
+        response.json(resultAvaliacao)
+
+})
+
+//EndPoint para buscar avaliação no Banco de Dados pelo ID
+app.get('/v1/controle-jogos/avaliacao/:id', cors(), async function (request, response) {
+        
+        let idAvaliacao = request.params.id
+
+        //Chama a função para listar as avaliações
+        let resultAvaliacao = await controllerAvaliacao.buscarAvaliacao(idAvaliacao)
+
+        response.status(resultAvaliacao.status_code)
+        response.json(resultAvaliacao)
+
+})
+
+//EndPoint para deletaravaliação no Banco de Dados pelo ID
+app.delete('/v1/controle-jogos/avaliacao/:id', cors(), async function (request, response) {
+        
+        let idAvaliacao = request.params.id
+
+        //Chama a função para listar as avaliações
+        let resultAvaliacao = await controllerAvaliacao.excluirAvaliacao(idAvaliacao)
+
+        response.status(resultAvaliacao.status_code)
+        response.json(resultAvaliacao)
+
+})
+
+//EndPoint para atualizar avaliação no Banco de Dados pelo ID
+app.put('/v1/controle-jogos/avaliacao/:id', cors(), bodyParserJSON, async function (request,response) {
+        
+        
+        //Recebe content-type da requisição
+        let contentType = request.headers['content-type']
+
+        //Recebe o ID da avaliação
+        let idAvaliacao = request.params.id
+
+        //Recebe os dados do jogo encainhado no body da requisição
+        let dadosBody = request.body
+
+        let resultAvaliacao = await controllerAvaliacao.atualizarAvaliacao(dadosBody, idAvaliacao, contentType)
+        
+        response.status(resultAvaliacao.status_code)
+        response.json(resultAvaliacao)
+
+})
 
 app.listen('8080', function(){
         console.log('API aguardando Requisições...')

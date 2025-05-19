@@ -127,6 +127,39 @@ const excluirJogoCategoria = async function(id){
     }
 }
 
+//Função para tratar o retorno de uma lista de categorias do DAO
+const listarJogoCategoria = async function(id){
+
+    try{
+            dadosJogoCategoria = {}
+
+            let resultCategoria = await jogoCategoriaDAO.selectAllJogoCategoria(parseInt(id))
+            
+            if (resultCategoria != false || typeof(resultCategoria) == 'object'){
+                if (resultCategoria.length > 0){
+
+                    //Criando JSON de retorno de dados da API
+                    dadosJogoCategoria.status = true
+                    dadosJogoCategoria.status_code = 200
+                    dadosJogoCategoria.items = resultCategoria.length
+                    dadosJogoCategoria.categoria = resultCategoria
+
+                    return dadosJogoCategoria //200
+
+                }else{
+                    MESSAGE.ERROR_NOT_FOUND
+                }
+            }else{
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+
+    }catch(error){
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+
+}
+
+
 //Função para tratar o retono de um genero filtrando pelo ID do DAO
 const buscarJogoCategoria = async function(id){
 
@@ -140,7 +173,7 @@ const buscarJogoCategoria = async function(id){
 
             let resultCategoria = await jogoCategoriaDAO.selectByIdJogoCategoria(parseInt(id))
             if (resultCategoria != false || typeof(resultCategoria) == 'object'){
-                if (resultCategoria.length == 0){
+                if (resultCategoria.length > 0){
 
                     //Criando JSON de retorno de dados da API
                     dadosJogoCategoria.status = true
@@ -175,7 +208,7 @@ const buscarJogoPorCategoria = async function(idCategoria){
             let resultCategoria = await jogoCategoriaDAO.selectJogoByCategoria(parseInt(idCategoria))
 
             if (resultCategoria != false || typeof(resultCategoria) == 'object'){
-                if (resultCategoria.length == 0){
+                if (resultCategoria.length > 0){
 
                     //Criando JSON de retorno de dados da API
                     dadosJogoCategoria.status = true
@@ -204,6 +237,7 @@ module.exports = {
     inserirJogoCategoria,
     atualizarFaixaEtaria,
     excluirJogoCategoria,
+    listarJogoCategoria,
     buscarJogoCategoria,
     buscarJogoPorCategoria
 }   
