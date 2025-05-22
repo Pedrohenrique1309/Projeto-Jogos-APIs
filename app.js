@@ -664,7 +664,7 @@ app.post('/v1/controle-jogos/avaliacao', cors(), bodyParserJSON, async function 
 
         //Encaminhando os dados do body da requisição para a controller inserir no Banco de Dados 
         let resultAvaliacao =  await controllerAvaliacao.inserirAvaliacao(dadosBody,contentType)
-
+        
         response.status(resultAvaliacao.status_code)
         response.json(resultAvaliacao)
 

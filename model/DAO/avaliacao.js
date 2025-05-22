@@ -16,7 +16,7 @@ const prisma = new PrismaClient()
 //Função para inserir no Banco de Dados ma nova avaliação
 const insertAvaliacao = async function(avaliacao){
     try{
-
+       
         let sql = `insert into tbl_avaliacao(
                                             comentario,
                                             pontuacao,
@@ -29,6 +29,7 @@ const insertAvaliacao = async function(avaliacao){
 
         //Executa o script SQL no BD e AGUARDA o retorno do BD
         let result = await prisma.$executeRawUnsafe(sql)
+        
 
         if(result){
             return true
@@ -37,7 +38,6 @@ const insertAvaliacao = async function(avaliacao){
         }
 
     }catch(error){
-        console.log(error)
         return false
     }
 
@@ -72,7 +72,7 @@ const updatetAvaliacao = async function(avaliacao){
 
 
 //Função para excluir no Banco de Dados uma avaliacao existente
-const deleteJogo = async function(id){
+const deleteAvaliacao= async function(id){
     
     try{
 
@@ -144,7 +144,7 @@ const selectByIdAvaliacao = async function(id){
 module.exports = {
     insertAvaliacao,
     updatetAvaliacao,
-    deleteJogo,
+    deleteAvaliacao,
     selectAllAvaliacao,
     selectByIdAvaliacao
 }

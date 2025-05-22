@@ -18,16 +18,20 @@ const controllerJogo = require('../jogo/controllerJogo.js')
 const inserirAvaliacao = async function(avaliacao, contentType){
 
     try{
+    
         
         if(contentType == 'application/json'){
-
+           
+            
             if(
-                avaliacao.comentario  == undefined || avaliacao.comentario  == ''  || avaliacao.comentario == null || NaN(avaliacao.comentario)  || 
-                avaliacao.pontuacao   == undefined || avaliacao.pontuacao   == ''  || avaliacao.avaliacao  == null || isNaN(avaliacao.pontuacao) || avaliacao.pontuacao <= 0  ||
+                avaliacao.comentario  == undefined || avaliacao.comentario  == ''  || avaliacao.comentario == null || typeof avaliacao.comentario !== 'string'  || 
+                avaliacao.pontuacao   == undefined || avaliacao.pontuacao   == ''  || avaliacao.pontuacao  == null || isNaN(avaliacao.pontuacao) ||
                 avaliacao.id_jogo     == undefined || avaliacao.id_jogo     == ''  || avaliacao.id_jogo    == null || isNaN(avaliacao.id_jogo)   || avaliacao.id_jogo   <= 0    
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELD //400
             }else{
+                
+                
                 //encamnha os dados da nova avaliacao para ser inserido no banco de dados
                 let resultAvaliacao = await avaliacaoDAO.insertAvaliacao(avaliacao)
                 
@@ -58,8 +62,8 @@ const atualizarAvaliacao = async function(avaliacao, id, contentType){
 
             if( 
                 id == undefined || id == ''  || id  == null || isNaN(id) || id <= 0 ||
-                avaliacao.comentario  == undefined || avaliacao.comentario  == ''  || avaliacao.comentario == null || NaN(avaliacao.comentario)  || 
-                avaliacao.pontuacao   == undefined || avaliacao.pontuacao   == ''  || avaliacao.avaliacao  == null || isNaN(avaliacao.pontuacao) || avaliacao.pontuacao <= 0  ||
+                avaliacao.comentario  == undefined || avaliacao.comentario  == ''  || avaliacao.comentario == null || typeof avaliacao.comentario !== 'string'  || 
+                avaliacao.pontuacao   == undefined || avaliacao.pontuacao   == ''  || avaliacao.pontuacao  == null || isNaN(avaliacao.pontuacao) ||
                 avaliacao.id_jogo     == undefined || avaliacao.id_jogo     == ''  || avaliacao.id_jogo    == null || isNaN(avaliacao.id_jogo)   || avaliacao.id_jogo   <= 0    
             ){
 
@@ -132,7 +136,9 @@ const excluirAvaliacao = async function(id){
             return ERROR_REQUIRED_FIELD //400
         }
 
-    }catch(result){
+    }catch(error){
+        console.log(error);
+        
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
@@ -143,16 +149,16 @@ const listarAvaliacao = async function (){
     try{
 
         //Objeto array para utilizar forEach para carregar os dados da avaliacao e do jogo
-        let arrayAvaliacoes = []
+        const arrayAvaliacoes = []
 
         let dadosAvaliacoes = {}
 
         //Chama função para retornar os dados da avaliacao
         let resultAvaliacao = await avaliacaoDAO.selectAllAvaliacao()
-
+        
         if(resultAvaliacao != false || typeof(resultAvaliacao) == 'object'){
 
-            if(resultJogo.length > 0){
+            if(resultAvaliacao.length > 0){
 
                 //Cria um objeto Json para retornar a lista de avaliacoes
                 dadosAvaliacoes.status = true
@@ -171,8 +177,9 @@ const listarAvaliacao = async function (){
                         //Adicionao um atributo "jogo" no JSON de jogo
                         itemAvaliacao.jogo = dadosJogo.games
 
+                        delete itemAvaliacao.id_jogo
+                        
                         arrayAvaliacoes.push(itemAvaliacao)
-
                 }
 
                 dadosAvaliacoes.assessments = arrayAvaliacoes
@@ -180,7 +187,6 @@ const listarAvaliacao = async function (){
                 return  dadosAvaliacoes//200
 
             }else{
-    
                 return MESSAGE.ERROR_NOT_FOUND //404
             }
 
@@ -189,10 +195,8 @@ const listarAvaliacao = async function (){
         }
         
         
-    }catch(erro){
-
+    }catch(error){
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
-
     }
 
 }
@@ -211,15 +215,15 @@ const buscarAvaliacao = async function (id){
         let dadosAvaliacoes = {}
 
         //Chama função para retornar os dados da avaliacao
-        let resultAvaliacao = await avaliacaoDAO.selectAllAvaliacao()
-
+        let resultAvaliacao = await avaliacaoDAO.selectByIdAvaliacao(id)
+            
         
         if(resultAvaliacao !== String(resultAvaliacao)){
-
+            
             if(resultAvaliacao != false || typeof(resultAvaliacao) == 'object'){
-
-                if(resultJogo.length > 0){
-
+            
+                if(resultAvaliacao.length > 0){
+            
                     //Cria um objeto Json para retornar a lista de avaliacoes
                     dadosAvaliacoes.status = true
                     dadosAvaliacoes.status_code = 200
@@ -236,6 +240,8 @@ const buscarAvaliacao = async function (id){
 
                             //Adicionao um atributo "jogo" no JSON de jogo
                             itemAvaliacao.jogo = dadosJogo.games
+
+                            delete itemAvaliacao.id_jogo
 
                             arrayAvaliacoes.push(itemAvaliacao)
 

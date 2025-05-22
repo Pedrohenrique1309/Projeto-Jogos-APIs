@@ -42,7 +42,9 @@ const insertJogo = async function(jogo){
         let result = await prisma.$executeRawUnsafe(sql)
 
         if(result){
-            return true
+            let sqlSelectId = `SELECT * FROM tbl_jogo WHERE nome = '${jogo.nome}' ORDER BY id DESC LIMIT 1`
+            let criar = await prisma.$queryRawUnsafe(sqlSelectId)
+            return criar[0]
         }else{
             return false
         }

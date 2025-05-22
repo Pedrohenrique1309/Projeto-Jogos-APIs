@@ -119,7 +119,7 @@ const excluirDesenvolvedor= async function(id){
                 }
 
             }else if (resultDesenvolvedor.status_code == 404){
-                return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+                return MESSAGE.ERROR_NOT_FOUND //404
             }else{
                 return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
             }
@@ -217,7 +217,7 @@ const buscarDesenvolvedor = async function (id){
 
 
     }catch(result){
-
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
     
 }

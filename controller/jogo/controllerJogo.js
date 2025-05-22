@@ -32,14 +32,58 @@ const inserirJogo = async function(jogo, contentType){
                 jogo.descricao       == undefined  || 
                 jogo.foto_capa       == undefined  ||  jogo.foto_capa.length > 200   ||
                 jogo.link            == undefined  ||  jogo.link.length      > 200   ||
-                 jogo.id_faixa_etaria == undefined ||  jogo.id_faixa_etaria == ''    || jogo.id_faixa_etaria  == null || isNaN(jogo.id_faixa_etaria) || jogo.id_faixa_etaria <= 0 
+                jogo.id_faixa_etaria == undefined ||  jogo.id_faixa_etaria == ''    || jogo.id_faixa_etaria  == null || isNaN(jogo.id_faixa_etaria) || jogo.id_faixa_etaria <= 0 
             ){
                 return MESSAGE.ERROR_REQUIRED_FIELD //400
             }else{
                 //encamnha os dados do novo jogo para ser inserido no banco de dados
                 let resultJogo = await jogoDAO.insertJogo(jogo)
-                
+
                 if(resultJogo){
+                    
+                    for(itemCategoria of jogo.categoria){
+                            itemCategoria.id_jogo = resultJogo.id
+
+                            let resultItemCategoria = await controllerJogoCategoria.inserirJogoCategoria(itemCategoria, contentType)
+
+                            if(!resultItemCategoria){
+                                return MESSAGE.ERROR_CONTENT_TYPE
+                            }
+                    }
+
+                    for(itemDesenvolvedor of jogo.desenvolvedor){
+                        itemDesenvolvedor.id_jogo = resultJogo.id
+
+                        let resultItemDesenvolvedor = await controllerJogoDesenvolvedor.inserirJogoDesenvolvedor(itemDesenvolvedor, contentType)
+
+                        if(!resultItemDesenvolvedor){
+                            return MESSAGE.ERROR_CONTENT_TYPE
+                        }
+                    }
+
+                    for(itemPlataformaVersao of jogo.plataforma_versao){
+                        itemPlataformaVersao.id_jogo = resultJogo.id
+
+                        let resultItemPlataformaVersao = await controllerJogoPlataformaVersao.inserirJogoPlataformaVersao(itemPlataformaVersao, contentType)
+
+                        if(!resultItemPlataformaVersao){
+                            return MESSAGE.ERROR_CONTENT_TYPE
+                        }
+                    }
+
+                    for(itemPlataformaAtualizacao of jogo.plataforma_atualizacao){
+                        itemPlataformaAtualizacao.id_jogo = resultJogo.id
+
+                        let resultItemPlataformaAtualizacao = await controllerPlataformaJogoAtualizacao.inserirPlataformaJogoAtualizacao(itemPlataformaAtualizacao, contentType)
+
+                        if(!resultItemPlataformaAtualizacao){
+                            return MESSAGE.ERROR_CONTENT_TYPE
+                        }
+                    }
+
+
+
+
                     return MESSAGE.SUCESS_CREATE_ITEM //201
                 }else{
                     return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
@@ -52,6 +96,8 @@ const inserirJogo = async function(jogo, contentType){
         }
     
     } catch(error){
+        console.log(error);
+        
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }   
 
@@ -225,28 +271,32 @@ const listarJogo = async function (){
                     /**************  RETORNA OS DADOS DA CATEGORIA PARA COLOCAR NO RETORNO DO JOGO **********/
                     
                         let dadosJogoCategoria = await controllerJogoCategoria.buscarJogoPorCategoria(itemJogo.id)  
-                        itemJogo.categoria = dadosJogoCategoria.categorys
+                        itemJogo.categoria = dadosJogoCategoria.categoria
+
                     
                     /**************  RETORNA OS DADOS DO DESENVOLVEDOR PARA COLOCAR NO RETORNO DO JOGO **********/
 
                         let dadosJogoDesenvolvedor = await controllerJogoDesenvolvedor.buscarJogoPorDesenvolvedor(itemJogo.id)
-                        itemJogo.desenvolvedor = dadosJogoDesenvolvedor.developers
+                        itemJogo.desenvolvedor = dadosJogoDesenvolvedor.desenvolvedor
 
                     /**************  RETORNA OS DADOS DA PLATAFORMA PARA COLOCAR NO RETORNO DO JOGO **********/
 
                         let dadosJogoPlataforma = await controllerPlataformaJogoAtualizacao.buscarJogoPorPlataforma(itemJogo.id)
-                        itemJogo.plataforma = dadosJogoPlataforma.platforms
+                        itemJogo.plataforma = dadosJogoPlataforma.plataforma
+
 
                     /**************  RETORNA OS DADOS DA ATUALIZACAO PARA COLOCAR NO RETORNO DO JOGO **********/
 
                         let dadosAtualizacao = await controllerPlataformaJogoAtualizacao.buscarAtualizacaoPorJogo(itemJogo.id)
-                        itemJogo.atualizacao = dadosJogoAtualizacao.updates
+                        itemJogo.plataforma_atualizacao = dadosAtualizacao.plataformaAtualizacao
 
      0               /**************  RETORNA OS DADOS DA VERSÃO PARA COLOCAR NO RETORNO DO JOGO **********/
 
                         let dadosJogoVersao = await controllerJogoPlataformaVersao.buscarVersaoPorJogo(itemJogo.id)
-                        itemJogo.versao = dadosJogoVersao.versions
+                        itemJogo.versao = dadosJogoVersao.plataformaVersao
 
+                        console.log(itemJogo);
+                        
                     arrayJogos.push(itemJogo)
 
                 }

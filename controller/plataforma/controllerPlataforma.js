@@ -141,7 +141,7 @@ const listarPlataforma  = async function (){
         //Chama função para retornar os dados da plataforma 
         let resultPlataforma  = await plataformaDAO.selectAllPlataforma()
 
-
+        
         if(resultPlataforma  != false || typeof(resultPlataforma ) == 'object'){
 
             if(resultPlataforma.length > 0){
@@ -173,7 +173,6 @@ const listarPlataforma  = async function (){
         
         
     }catch(erro){
-
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
 
     }
@@ -198,16 +197,21 @@ const buscarPlataforma = async function (id){
 
                     if(resultPlataforma.length > 0){
         
-                        //Cria um objeto Json para retornar a lista de Plataformas
                         dadosPlataforma.status = true
                         dadosPlataforma.status_code = 200
-                        dadosPlataforma.games = resultPlataforma
-                        dadosPlataforma.id = id
+                        dadosPlataforma.Items = resultPlataforma.length
+
+                        for (itemPlataforma of resultPlataforma){
+
+                            let dadosAssinatura = await controllerPlataformaAssinatura.buscarPlataformaPorAssinatura(itemPlataforma.id_assinatura)
+
+                            itemPlataforma.ssinatura = dadosAssinatura.signatures
+
+                        }
+
+                        dadosPlataforma.platforms = resultPlataforma
                         
                         return  dadosPlataforma//200
-
-                        
-    
                     }else{
             
                         return MESSAGE.ERROR_NOT_FOUND //404

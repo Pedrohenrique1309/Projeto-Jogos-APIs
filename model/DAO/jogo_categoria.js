@@ -109,12 +109,13 @@ const selectByIdJogoCategoria = async function(id){
 //Função que retornar os dados do Jogo filtrado pela categoria
 const selectJogoByCategoria = async function(idCategoria){
   try {
-      let sql = `select  tbl_jogo.* from tbl_jogo 
-                      inner join tbl_jogo_categoria 
-                        on tbl_jogo.id = tbl_jogo_categoria.id_jogo
-                      inner join tbl_categoria
-                        on tbl_categoria.id = tbl_jogo_categoria.id_categoria
-                  where tbl_categoria = ${idCategoria}`
+      let sql = `SELECT tbl_.* 
+                          FROM tbl_jogo 
+                          INNER JOIN tbl_jogo_categoria 
+                              ON tbl_jogo.id = tbl_jogo_categoria.id_jogo
+                          INNER JOIN tbl_categoria 
+                              ON tbl_categoria.id = tbl_jogo_categoria.id_categoria
+                          WHERE tbl_categoria.id = 1;`
 
       let resultJogoCategoria = await prisma.$queryRawUnsafe(sql)
 
