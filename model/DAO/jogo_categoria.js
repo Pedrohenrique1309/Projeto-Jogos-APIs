@@ -109,13 +109,37 @@ const selectByIdJogoCategoria = async function(id){
 //Função que retornar os dados do Jogo filtrado pela categoria
 const selectJogoByCategoria = async function(idCategoria){
   try {
-      let sql = `SELECT tbl_.* 
-                          FROM tbl_jogo 
+      let sql = `SELECT tbl_jogo.* 
+                          FROM tbl_categoria 
                           INNER JOIN tbl_jogo_categoria 
                               ON tbl_jogo.id = tbl_jogo_categoria.id_jogo
                           INNER JOIN tbl_categoria 
                               ON tbl_categoria.id = tbl_jogo_categoria.id_categoria
-                          WHERE tbl_categoria.id = 1;`
+                          WHERE tbl_categoria.id = ${idCategoria};`
+
+      let resultJogoCategoria = await prisma.$queryRawUnsafe(sql)
+
+      if(resultJogoCategoria)
+        return resultJogoCategoria
+      else
+        return false
+  } catch (error) {
+    return false
+  }
+}
+
+
+
+//Função que retornar os dados do Jogo filtrado pela categoria
+const selectCategoriaByJogo = async function(idJogo){
+  try {
+      let sql = `SELECT tbl_categoria.* 
+                          FROM tbl_jogo
+                          INNER JOIN tbl_jogo_categoria 
+                              ON tbl_jogo.id = tbl_jogo_categoria.id_jogo
+                          INNER JOIN tbl_categoria 
+                              ON tbl_categoria.id = tbl_jogo_categoria.id_categoria
+                          WHERE tbl_jogo.id = ${idJogo};`
 
       let resultJogoCategoria = await prisma.$queryRawUnsafe(sql)
 
@@ -135,6 +159,7 @@ module.exports = {
     deleteJogoCategoria,
     selectAllJogoCategoria,
     selectByIdJogoCategoria,
-    selectJogoByCategoria
+    selectJogoByCategoria,
+    selectCategoriaByJogo
 }
 

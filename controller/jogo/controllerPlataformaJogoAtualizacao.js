@@ -10,6 +10,7 @@ const MESSAGE = require('../../modulo/config.js')
 
 //Import do aquivo para realizar o CRUD de dados no Banco de Dados
 const plataformaJogoAtualizacaoDAO = require('../../model/DAO/plataforma_jogo_atualizacao.js')
+const { buscarPlataformaPorJogo } = require('./controllerJogoPlataformaVersao.js')
 
 //Função para tratar a inserção de uma nova plataforma e atualizacao no DAO
 const inserirPlataformaJogoAtualizacao = async function(plataformaJogoAtualizacao, contentType){
@@ -228,6 +229,6 @@ module.exports = {
     excluirPlataformaJogoAtualizacao,
     listarPlataformaJogoAtualizacao,
     buscarJogoPorPlataforma,
-    buscarJogoPorPlataforma,
+    buscarPlataformaPorJogo,
     buscarAtualizacaoPorJogo
 }

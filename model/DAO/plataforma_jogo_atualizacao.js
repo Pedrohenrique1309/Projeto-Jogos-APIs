@@ -43,7 +43,7 @@ const insertPlataformaJogoAtualizacao = async function(plataformaJogoAtualizacao
 }
 
 //Função para atualizar uma plataformaJogoAtuazalizacao existente
-const updatePlataformaJogoAtuazalizacao = async function(plataformaJogoAtuazalizacao){
+const updatePlataformaJogoAtualizacao = async function(plataformaJogoAtuazalizacao){
   try {
       let sql = `update tbl_plataforma_jogo_atualizacao set        
                                                             id_plataforma  = ${plataformaJogoAtualizacao.id_plataforma},
@@ -64,7 +64,7 @@ const updatePlataformaJogoAtuazalizacao = async function(plataformaJogoAtuazaliz
 }
 
 //Função para excluir um plataformaJogoAtuazalizacao existente
-const deletePlataformaJogoAtuazalizacao = async function(id){
+const deletePlataformaJogoAtualizacao = async function(id){
   try {
     let sql = `delete from tbl_plataforma_jogo_atualizacao where id = ${id}`
 
@@ -80,7 +80,7 @@ const deletePlataformaJogoAtuazalizacao = async function(id){
 }
 
 //Função para retornar todos os plataformaJogoAtuazalizacao existentes
-const selectAllPlataformaJogoAtuazalizacao = async function(){
+const selectAllPlataformaJogoAtualizacao = async function(){
 
     try {
       //ScriptSQL para retornar todos os dados
@@ -243,9 +243,9 @@ const selectPlataformaByAtualizacao = async function(idAtualizacao){
 
 module.exports = {
     insertPlataformaJogoAtualizacao,
-    updatePlataformaJogoAtuazalizacao,
-    deletePlataformaJogoAtuazalizacao,
-    selectAllPlataformaJogoAtuazalizacao,
+    updatePlataformaJogoAtualizacao,
+    deletePlataformaJogoAtualizacao,
+    selectAllPlataformaJogoAtualizacao,
     selectByIdPlataformaJogoAtuazalizacao,
     selectJogoByPlataforma,
     selectPlataformaByJogo,

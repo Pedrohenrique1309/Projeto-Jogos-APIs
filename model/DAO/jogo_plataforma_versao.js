@@ -31,14 +31,14 @@ const insertJogoPlataformaVersao = async function(jogoPlataformaVersao){
       //Executa o scriptSQL no banco de dados e aguarda o retorno do BD para 
       //saber se deu certo                                  
       let result = await prisma.$executeRawUnsafe(sql)
-
+      
       if(result)
           return true
       else
           return false
   } catch (error) {
-      
-      return false
+    console.log(error);
+    return false
   }
 }
 
@@ -160,11 +160,11 @@ const selectJogoByPlataforma = async function(idPlataforma){
 //Função para retornar os dados da versao filtrando pelo jogo
 const selectVersaoByJogo = async function(idJogo){
   try {
-      let sql = `select tbl_versao.* from tbl_jogo 
+      let sql = `select tbl_versao_jogo.* from tbl_jogo 
                           inner join tbl_jogo_plataforma_versao
                             on tbl_jogo.id = tbl_jogo_plataforma_versao.id_jogo
-                          inner join tbl_versao
-                            on tbl_versao.id = tbl_jogo_plataforma_versao.id_versao
+                          inner join tbl_versao_jogo
+                            on tbl_versao_jogo.id = tbl_jogo_plataforma_versao.id_versao
                       where tbl_jogo.id = ${idJogo}`
 
       let result = await prisma.$queryRawUnsafe(sql)

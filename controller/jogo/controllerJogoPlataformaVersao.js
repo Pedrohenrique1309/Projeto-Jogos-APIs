@@ -10,23 +10,27 @@ const MESSAGE = require('../../modulo/config.js')
 
 //Import do aquivo para realizar o CRUD de dados no Banco de Dados
 const jogoPlataformaVersaoDAO = require('../../model/DAO/jogo_plataforma_versao.js')
-const { buscarAtualizacaoPorJogo } = require('./controllerPlataformaJogoAtualizacao.js')
 
 //Função para tratar a inserção de uma nova plataforma e versao no DAO
 const inserirJogoPlataformaVersao = async function(jogoPlataformaVersao, contentType){
     try {
         if(String(contentType).toLowerCase() == 'application/json')
         {
+            
                 if (
-                    jogoPlataformaVersao.id_jogo       == ''  || jogoPlataformaVersao.id_jogo       == undefined    || jogoPlataformaVersao.id_jogo       == null || isNaN(jogoPlataformaVersao.id_jogo)       || jogoPlataformaVersao.id_jogo      <=0 ||
-                    jogoPlataformaVersao.id_plataforma == ''  || jogoPlataformaVersao.id_plataforma == undefined    || jogoPlataformaVersao.id_plataforma == null || isNaN(jogoPlataformaVersao.id_plataforma) || plataformaJogoAtualizacao.id_jogo <=0 ||
-                    jogoPlataformaVersao.id_versao     == ''  || jogoPlataformaVersao.id_versao     == undefined    || jogoPlataformaVersao.id_versao     == null || isNaN(jogoPlataformaVersao.id_versao)     || jogoPlataformaVersao.id_versao    <=0
+                    jogoPlataformaVersao.id_jogo       == ''  || jogoPlataformaVersao.id_jogo       == undefined    || jogoPlataformaVersao.id_jogo       == null || isNaN(jogoPlataformaVersao.id_jogo)       || jogoPlataformaVersao.id_jogo            <= 0 ||
+                    jogoPlataformaVersao.id_plataforma == ''  || jogoPlataformaVersao.id_plataforma == undefined    || jogoPlataformaVersao.id_plataforma == null || isNaN(jogoPlataformaVersao.id_plataforma) || jogoPlataformaVersao.id_plataforma <= 0 ||
+                    jogoPlataformaVersao.id_versao     == ''  || jogoPlataformaVersao.id_versao     == undefined    || jogoPlataformaVersao.id_versao     == null || isNaN(jogoPlataformaVersao.id_versao)     || jogoPlataformaVersao.id_versao          <= 0
                 )
                 {
                     return MESSAGE.ERROR_REQUIRED_FIELD //400
                 }else{
+               
                     //Chama a função para inserir no BD e aguarda o retorno da função
                     let resultJogoPlataformaVersao = await jogoPlataformaVersaoDAO.insertJogoPlataformaVersao(jogoPlataformaVersao)
+
+                    console.log(resultJogoPlataformaVersao);
+                    
 
                     if(resultJogoPlataformaVersao)
                         return MESSAGE.SUCESS_CREATE_ITEM //201
@@ -187,6 +191,42 @@ const buscarJogoPorPlataforma = async function(idPlataforma){
 
 }
 
+const buscarPlataformaPorJogo = async function(idJogo){
+
+    try{
+
+        if(idJogo == '' || idJogo == undefined || idJogo == null || isNaN(idJogo) || idJogo <= 0){
+            return MESSAGE.ERROR_REQUIRED_FIELD //400
+        }else{
+
+            dadosJogoPlataforma = {}
+            let resultPlataforma = await jogoPlataformaVersaoDAO.selectPlataformaByJogo(parseInt(idJogo))
+
+            if (resultPlataforma != false || typeof(resultPlataforma) == 'object'){
+                if (resultPlataforma.length > 0){
+
+                    //Criando JSON de retorno de dados da API
+                    dadosJogoPlataforma.status = true
+                    dadosJogoPlataforma.status_code = 200
+                    dadosJogoPlataforma.plataforma = resultPlataforma
+
+                    return dadosJogoPlataforma //200
+
+                }else{
+                    return MESSAGE.ERROR_NOT_FOUND //404
+                }
+            
+            }else{
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        }
+
+    }catch(error){
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+
+}
+
 const buscarVersaoPorJogo = async function(idJogo){
 
     try{
@@ -229,5 +269,6 @@ module.exports = {
     excluirJogoPlataformaVersao,
     listarJogoPlataformaVersao,
     buscarJogoPorPlataforma,
+    buscarPlataformaPorJogo,
     buscarVersaoPorJogo
 }

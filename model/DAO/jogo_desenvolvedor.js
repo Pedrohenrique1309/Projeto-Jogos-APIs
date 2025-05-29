@@ -137,7 +137,7 @@ const selectDesenvolvedorByJogo = async function(idJogo){
 //Função para retornar os dados do jogo filtrando pelo desenvolvedor
 const selectJogoByDesenvolvedor = async function(idDesenvolvedor){
   try {
-      let sql = `select tbl_desenvolvedor.* from tbl_jogo 
+      let sql = `select tbl_jogo.* from tbl_desenvolvedor
                           inner join tbl_jogo_desenvolvedor
                             on tbl_jogo.id = tbl_jogo_desenvolvedor.id_jogo
                           inner join tbl_jogo

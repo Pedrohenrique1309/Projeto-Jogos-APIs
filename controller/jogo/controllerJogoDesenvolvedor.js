@@ -219,12 +219,50 @@ const buscarJogoPorDesenvolvedor = async function(idDesenvolvedor){
 
 }
 
+const buscarDesenvolvedorPorJogo = async function(idJogo){
+
+    try{
+
+        if(idJogo == '' || idJogo == undefined || idJogo == null || isNaN(idJogo) || idJogo <= 0){
+            return MESSAGE.ERROR_REQUIRED_FIELD //400
+        }else{
+
+            dadosJogoDesenvolvedor = {}
+            let resultDesenvolvedor = await jogoDesenvolvedorDAO.selectDesenvolvedorByJogo(parseInt(idJogo))
+
+            if (resultDesenvolvedor != false || typeof(resultDesenvolvedor) == 'object'){
+                if (resultDesenvolvedor.length > 0){
+
+                    //Criando JSON de retorno de dados da API
+                    dadosJogoDesenvolvedor.status = true
+                    dadosJogoDesenvolvedor.status_code = 200
+                    dadosJogoDesenvolvedor.desenvolvedor = resultDesenvolvedor
+
+                    return dadosJogoDesenvolvedor //200
+
+                }else{
+                    return MESSAGE.ERROR_NOT_FOUND //404
+                }
+            
+            }else{
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        }
+
+    }catch(error){
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+
+}
+
+
 module.exports = {
     inserirJogoDesenvolvedor,
     atualizarJogoDesenvolvedor,
     excluirJogoDesenvolvedor,
     listarJogoDesenvolvedor,
     buscarJogoDesenvolvedor,
-    buscarJogoPorDesenvolvedor
+    buscarJogoPorDesenvolvedor,
+    buscarDesenvolvedorPorJogo
 }
 

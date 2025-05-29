@@ -105,7 +105,7 @@ const deleteJogo = async function(id){
             return false
         }
 
-    }catch(result){
+    }catch(error){
         return false
     }
 

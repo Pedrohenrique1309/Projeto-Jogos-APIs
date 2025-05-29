@@ -61,10 +61,11 @@ const inserirJogo = async function(jogo, contentType){
                         }
                     }
 
-                    for(itemPlataformaVersao of jogo.plataforma_versao){
-                        itemPlataformaVersao.id_jogo = resultJogo.id
+                    for(plataformaVersao of jogo.plataforma_versao){
 
-                        let resultItemPlataformaVersao = await controllerJogoPlataformaVersao.inserirJogoPlataformaVersao(itemPlataformaVersao, contentType)
+                        plataformaVersao.id_jogo = resultJogo.id
+
+                        let resultItemPlataformaVersao = await controllerJogoPlataformaVersao.inserirJogoPlataformaVersao( plataformaVersao, contentType)
 
                         if(!resultItemPlataformaVersao){
                             return MESSAGE.ERROR_CONTENT_TYPE
@@ -225,7 +226,8 @@ const excluirJogo = async function(id){
             return ERROR_REQUIRED_FIELD //400
         }
 
-    }catch(result){
+    }catch(error){
+        console.log(error);
         return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER
     }
 }
@@ -256,6 +258,8 @@ const listarJogo = async function (){
                 //substitui o forEach para trabalhar com await e async
                 for(itemJogo of resultJogo){
 
+                    delete itemJogo.versao
+
                     /************* RETORNA DADOS DA FAIXA ETARIA PARA COLOCAR NO RETORNO DO JOGO****************/
                         
                     //Busca os dados da faixa etária na controller de faixa etaria
@@ -270,32 +274,31 @@ const listarJogo = async function (){
 
                     /**************  RETORNA OS DADOS DA CATEGORIA PARA COLOCAR NO RETORNO DO JOGO **********/
                     
-                        let dadosJogoCategoria = await controllerJogoCategoria.buscarJogoPorCategoria(itemJogo.id)  
+                        let dadosJogoCategoria = await controllerJogoCategoria.buscarCategoriaPorJogo(itemJogo.id)  
                         itemJogo.categoria = dadosJogoCategoria.categoria
 
                     
                     /**************  RETORNA OS DADOS DO DESENVOLVEDOR PARA COLOCAR NO RETORNO DO JOGO **********/
 
-                        let dadosJogoDesenvolvedor = await controllerJogoDesenvolvedor.buscarJogoPorDesenvolvedor(itemJogo.id)
+                        let dadosJogoDesenvolvedor = await controllerJogoDesenvolvedor.buscarDesenvolvedorPorJogo(itemJogo.id)
                         itemJogo.desenvolvedor = dadosJogoDesenvolvedor.desenvolvedor
 
                     /**************  RETORNA OS DADOS DA PLATAFORMA PARA COLOCAR NO RETORNO DO JOGO **********/
 
-                        let dadosJogoPlataforma = await controllerPlataformaJogoAtualizacao.buscarJogoPorPlataforma(itemJogo.id)
-                        itemJogo.plataforma = dadosJogoPlataforma.plataforma
-
+                        let dadosPlataforma = await controllerPlataformaJogoAtualizacao.buscarPlataformaPorJogo(itemJogo.id)
+                        itemJogo.plataforma = dadosPlataforma.plataforma
 
                     /**************  RETORNA OS DADOS DA ATUALIZACAO PARA COLOCAR NO RETORNO DO JOGO **********/
 
                         let dadosAtualizacao = await controllerPlataformaJogoAtualizacao.buscarAtualizacaoPorJogo(itemJogo.id)
-                        itemJogo.plataforma_atualizacao = dadosAtualizacao.plataformaAtualizacao
+                        itemJogo.atualizacao = dadosAtualizacao.atualizacao
 
-     0               /**************  RETORNA OS DADOS DA VERSÃO PARA COLOCAR NO RETORNO DO JOGO **********/
+        
+                    /**************  RETORNA OS DADOS DA VERSÃO PARA COLOCAR NO RETORNO DO JOGO **********/
 
-                        let dadosJogoVersao = await controllerJogoPlataformaVersao.buscarVersaoPorJogo(itemJogo.id)
-                        itemJogo.versao = dadosJogoVersao.plataformaVersao
+                        let dadosVersao = await controllerJogoPlataformaVersao.buscarVersaoPorJogo(itemJogo.id)                    
+                        itemJogo.versao = dadosVersao.versao
 
-                        console.log(itemJogo);
                         
                     arrayJogos.push(itemJogo)
 
@@ -353,6 +356,8 @@ const buscarJogo = async function (id){
                         //substitui o forEach para trabalhar com await e async
                         for(itemJogo of resultJogo){
         
+                            delete itemJogo.versao
+
                             /************* RETORNA DADOS DA FAIXA ETARIA PARA COLOCAR NO RETORNO DO JOGO****************/
                                 
                             //Busca os dados da faixa etária na controller de faixa etaria
@@ -367,29 +372,32 @@ const buscarJogo = async function (id){
         
                             /**************  RETORNA OS DADOS DA CATEGORIA PARA COLOCAR NO RETORNO DO JOGO **********/
                             
-                                let dadosJogoCategoria = await controllerJogoCategoria.buscarJogoPorCategoria(itemJogo.id)  
-                                itemJogo.categoria = dadosJogoCategoria.categorys
+                                let dadosJogoCategoria = await controllerJogoCategoria.buscarCategoriaPorJogo(itemJogo.id)  
+                                itemJogo.categoria = dadosJogoCategoria.categoria
         
+                            
                             /**************  RETORNA OS DADOS DO DESENVOLVEDOR PARA COLOCAR NO RETORNO DO JOGO **********/
-
-                                let dadosJogoDesenvolvedor = await controllerJogoDesenvolvedor.buscarJogoPorDesenvolvedor(itemJogo.id)
-                                itemJogo.desenvolvedor = dadosJogoDesenvolvedor.developers
-
+        
+                                let dadosJogoDesenvolvedor = await controllerJogoDesenvolvedor.buscarDesenvolvedorPorJogo(itemJogo.id)
+                                itemJogo.desenvolvedor = dadosJogoDesenvolvedor.desenvolvedor
+        
                             /**************  RETORNA OS DADOS DA PLATAFORMA PARA COLOCAR NO RETORNO DO JOGO **********/
-
-                                let dadosJogoPlataforma = await controllerPlataformaJogoAtualizacao.buscarJogoPorPlataforma(itemJogo.id)
-                                itemJogo.plataforma = dadosJogoPlataforma.platforms
-
+        
+                                let dadosPlataforma = await controllerPlataformaJogoAtualizacao.buscarPlataformaPorJogo(itemJogo.id)
+                                itemJogo.plataforma = dadosPlataforma.plataforma
+        
                             /**************  RETORNA OS DADOS DA ATUALIZACAO PARA COLOCAR NO RETORNO DO JOGO **********/
-
+        
                                 let dadosAtualizacao = await controllerPlataformaJogoAtualizacao.buscarAtualizacaoPorJogo(itemJogo.id)
-                                itemJogo.atualizacao = dadosAtualizacao.updates
-
-            0               /**************  RETORNA OS DADOS DA VERSÃO PARA COLOCAR NO RETORNO DO JOGO **********/
-
-                                let dadosJogoVersao = await controllerJogoPlataformaVersao.buscarVersaoPorJogo(itemJogo.id)
-                                itemJogo.versao = dadosJogoVersao.versions
-                        
+                                itemJogo.atualizacao = dadosAtualizacao.atualizacao
+        
+                
+                            /**************  RETORNA OS DADOS DA VERSÃO PARA COLOCAR NO RETORNO DO JOGO **********/
+        
+                                let dadosVersao = await controllerJogoPlataformaVersao.buscarVersaoPorJogo(itemJogo.id)                    
+                                itemJogo.versao = dadosVersao.versao
+        
+                                
                             arrayJogos.push(itemJogo)
         
                         }

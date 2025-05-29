@@ -232,6 +232,42 @@ const buscarJogoPorCategoria = async function(idCategoria){
 
 }
 
+const buscarCategoriaPorJogo = async function(idJogo){
+
+    try{
+
+        if(idJogo == '' ||idJogo == undefined || idJogo == null || isNaN(idJogo) || idJogo <= 0){
+            return MESSAGE.ERROR_REQUIRED_FIELD //400
+        }else{
+
+            dadosJogoCategoria = {}
+            let resultCategoria = await jogoCategoriaDAO.selectCategoriaByJogo(parseInt(idJogo))
+
+            if (resultCategoria != false || typeof(resultCategoria) == 'object'){
+                if (resultCategoria.length > 0){
+
+                    //Criando JSON de retorno de dados da API
+                    dadosJogoCategoria.status = true
+                    dadosJogoCategoria.status_code = 200
+                    dadosJogoCategoria.categoria = resultCategoria
+
+                    return dadosJogoCategoria //200
+
+                }else{
+                    return MESSAGE.ERROR_NOT_FOUND //404
+                }
+            
+            }else{
+                return MESSAGE.ERROR_INTERNAL_SERVER_MODEL //500
+            }
+        }
+
+    }catch(error){
+        return MESSAGE.ERROR_INTERNAL_SERVER_CONTROLLER //500
+    }
+
+}
+
 //exportando as funções para serem utilizadas em outros arquivos
 module.exports = {
     inserirJogoCategoria,
@@ -239,5 +275,6 @@ module.exports = {
     excluirJogoCategoria,
     listarJogoCategoria,
     buscarJogoCategoria,
-    buscarJogoPorCategoria
+    buscarJogoPorCategoria,
+    buscarCategoriaPorJogo
 }   

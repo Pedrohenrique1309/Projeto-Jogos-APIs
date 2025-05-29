@@ -63,13 +63,13 @@ create table tbl_desenvolvedor (
     presidente varchar(100) not null
 );
 
+
 CREATE TABLE tbl_avaliacao (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     comentario TEXT NOT NULL,
     pontuacao INT NOT NULL,
     id_jogo INT NOT NULL,
     
-    CONSTRAINT FK_AVALIACAO_JOGO
 	FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id)
 );
 
@@ -79,24 +79,21 @@ create table tbl_jogo_categoria (
     id_jogo INT NOT NULL,
     id_categoria INT NOT NULL,
     
-    CONSTRAINT FK_JOGO_JOGO_CATEGORIA
     FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id),
-    
-    CONSTRAINT FK_CATEGORIA_JOGO_CATEGORIA 
     FOREIGN KEY (id_categoria) REFERENCES tbl_categoria(id)
 );
+
+
 
 CREATE TABLE tbl_jogo_desenvolvedor (
     id INT NOT NULL  PRIMARY KEY AUTO_INCREMENT,
     id_desenvolvedor INT NOT NULL,
     id_jogo INT NOT NULL,
     
-    CONSTRAINT fk_desenvolvedor_jogo_desenvolvedor
 	FOREIGN KEY (id_desenvolvedor) REFERENCES tbl_desenvolvedor(id),
-        
-    CONSTRAINT fk_jogo_jogo_desenvolvedor
 	FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id)
 );
+
 
 
 CREATE TABLE tbl_plataforma_jogo_atualizacao (
@@ -106,15 +103,11 @@ CREATE TABLE tbl_plataforma_jogo_atualizacao (
     id_atualizacao INT NOT NULL,
     
 
-    CONSTRAINT fk_plataforma_plataforma_jogo_atualizacao
         FOREIGN KEY (id_plataforma) REFERENCES tbl_plataforma(id),
-        
-    CONSTRAINT fk_jogo_plataforma_jogo_atualizacao
         FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id),
-        
-    CONSTRAINT fk_atualizacao_plataforma_jogo_atualizacao
         FOREIGN KEY (id_atualizacao) REFERENCES tbl_atualizacao(id)
 );
+
 
 CREATE TABLE tbl_jogo_plataforma_versao (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -122,14 +115,9 @@ CREATE TABLE tbl_jogo_plataforma_versao (
     id_plataforma INT NOT NULL,
     id_versao INT NOT NULL,
 
-    CONSTRAINT fk_jogo_plataforma_jogo_versao
-        FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id),
-        
-    CONSTRAINT fk_plataforma_plataforma_jogo_versao
-        FOREIGN KEY (id_plataforma) REFERENCES tbl_plataforma(id),
-        
-    CONSTRAINT fk_versao_plataforma_jogo_versao
-        FOREIGN KEY (id_versao) REFERENCES tbl_versao_jogo(id)
+	FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id),
+	FOREIGN KEY (id_plataforma) REFERENCES tbl_plataforma(id),
+	FOREIGN KEY (id_versao) REFERENCES tbl_versao_jogo(id)
 );
 
 
@@ -138,11 +126,8 @@ CREATE TABLE tbl_plataforma_assinatura (
     id_plataforma INT NOT NULL,
     id_assinatura INT NOT NULL,
     
-    CONSTRAINT fk_plataforma_plataforma_assinatura
-        FOREIGN KEY (id_plataforma) REFERENCES tbl_plataforma(id),
-        
-    CONSTRAINT fk_assinatura_plataforma_assinatura
-        FOREIGN KEY (id_assinatura) REFERENCES tbl_assinatura(id)
+	FOREIGN KEY (id_plataforma) REFERENCES tbl_plataforma(id),
+	FOREIGN KEY (id_assinatura) REFERENCES tbl_assinatura(id)
 );
 
 
@@ -152,3 +137,5 @@ CREATE TABLE tbl_plataforma_assinatura (
 show tables;
 desc tbl_jogo;
 select * from tbl_jogo
+delete from tbl_jogo where id=2;
+                      
