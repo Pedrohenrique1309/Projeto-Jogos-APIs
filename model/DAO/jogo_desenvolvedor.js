@@ -162,6 +162,6 @@ module.exports = {
     selectAllJogoDesenvolvedor,
     selectByIdJogoDesenvolvedor,
     selectDesenvolvedorByJogo,
-    selectJogoByDesenvolvedor,
+    selectJogoByDesenvolvedor
 }
 

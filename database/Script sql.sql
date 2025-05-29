@@ -137,5 +137,30 @@ CREATE TABLE tbl_plataforma_assinatura (
 show tables;
 desc tbl_jogo;
 select * from tbl_jogo
-delete from tbl_jogo where id=2;
+delete from tbl_jogo where id=5;
+
+ALTER TABLE tbl_jogo_categoria
+ADD CONSTRAINT fk_jogo_categoria
+FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id)
+ON DELETE CASCADE;
+
+ALTER TABLE tbl_avaliacao
+ADD CONSTRAINT fk_avaliacao
+FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id)
+ON DELETE CASCADE;
+
+ALTER TABLE tbl_jogo_desenvolvedor
+ADD CONSTRAINT fk_jogo_desenvolvedor
+FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id)
+ON DELETE CASCADE;
+
+ALTER TABLE tbl_jogo_plataforma_versao
+ADD CONSTRAINT fk_jogo_plataforma_versao
+FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id)
+ON DELETE CASCADE;
+
+ALTER TABLE tbl_plataforma_jogo_atualizacao
+ADD CONSTRAINT fk_jogo_atualizacao
+FOREIGN KEY (id_jogo) REFERENCES tbl_jogo(id)
+ON DELETE CASCADE;
                       

@@ -118,6 +118,7 @@ const excluirJogoDesenvolvedor = async function(id){
 }
 
 
+
 //Função para tratar o retorno de uma lista de desenvolvedores do DAO
 const listarJogoDesenvolvedor = async function(id){
 

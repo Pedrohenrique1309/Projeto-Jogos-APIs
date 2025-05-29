@@ -74,6 +74,7 @@ const deleteJogoCategoria = async function(id){
   }
 }
 
+
 //Função para retornar todos os JogoCategorias existentes
 const selectAllJogoCategoria = async function(){
   try {
